@@ -3,540 +3,606 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English Dialogue – Linda & Glynda</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Linda & Glynda · English Dialogue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --linda:#ff6b6b;--glynda:#4ecdc4;
-  --bg:#0d0f18;--card:#161926;--card2:#1c2033;
-  --border:#252838;--text:#eeeef5;--muted:#6b6f8a;
+  --L:#e8614a; --L2:#f5a05a;
+  --G:#2ec4b6; --G2:#48a9e6;
+  --bg:#080c14; --card:#111827; --card2:#0f1c2e;
+  --border:#1a2740; --text:#dce8f8; --muted:#3d5478;
 }
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:80px}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:'Outfit',sans-serif;
+  min-height:100vh; padding-bottom:90px;
+  overflow-x:hidden;
+}
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background:
+    radial-gradient(ellipse 55% 45% at 10% 15%, rgba(232,97,74,.07) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 55% at 90% 80%, rgba(46,196,182,.06) 0%, transparent 65%);
+}
 
-header{text-align:center;padding:40px 20px 10px}
-header::after{content:'';display:block;width:56px;height:2px;background:linear-gradient(90deg,var(--linda),var(--glynda));margin:16px auto 0;border-radius:2px}
-header h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,5vw,2.3rem);font-weight:700;background:linear-gradient(135deg,var(--linda) 30%,var(--glynda));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-header p{color:var(--muted);font-size:.8rem;margin-top:6px}
+/* ── HEADER ── */
+header{ position:relative; z-index:1; text-align:center; padding:44px 20px 6px; }
+header h1{
+  font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600;
+  font-size:clamp(2rem,6vw,2.8rem); letter-spacing:-.5px;
+  background:linear-gradient(120deg,var(--L) 20%,var(--L2) 48%,var(--G) 80%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+header p{ color:var(--muted); font-size:.76rem; margin-top:5px; letter-spacing:.4px; }
+header::after{
+  content:''; display:block; width:44px; height:1.5px; border-radius:1px;
+  background:linear-gradient(90deg,var(--L),var(--G)); margin:16px auto 0;
+}
 
-#tts-status{text-align:center;font-size:.72rem;padding:6px 16px;color:var(--muted);min-height:24px}
+/* ── STATUS ── */
+#sts{ position:relative; z-index:1; text-align:center; font-size:.7rem; min-height:22px; padding:4px 16px; color:var(--muted); }
 
-.legend{display:flex;justify-content:center;gap:20px;padding:2px 16px 20px;flex-wrap:wrap}
-.legend-item{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted)}
-.swatch{width:22px;height:8px;border-radius:4px}
-.swatch.linda{background:linear-gradient(90deg,#ff6b6b,#ffa050)}
-.swatch.glynda{background:linear-gradient(90deg,#4ecdc4,#45b7d1)}
+/* ── CONTROLS ── */
+.ctrl{ position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; padding:10px 16px 26px; }
 
-.controls{max-width:680px;margin:4px auto 24px;padding:0 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.btn-play{
+  background:linear-gradient(135deg,var(--L),var(--L2));
+  color:#fff; border:none; border-radius:50px; padding:12px 30px;
+  font-family:'Outfit',sans-serif; font-size:.9rem; font-weight:600;
+  cursor:pointer; display:flex; align-items:center; gap:8px;
+  box-shadow:0 4px 20px rgba(232,97,74,.36);
+  transition:transform .15s, box-shadow .2s, opacity .2s;
+}
+.btn-play:hover{ transform:translateY(-2px); box-shadow:0 6px 26px rgba(232,97,74,.52); }
+.btn-play:active{ transform:scale(.97); }
+.btn-play svg{ width:14px; height:14px; fill:#fff; }
 
-.play-all-btn{background:linear-gradient(135deg,#ff6b6b,#ff8e53);color:#fff;border:none;border-radius:50px;padding:12px 30px;font-family:'DM Sans',sans-serif;font-size:.93rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(255,107,107,.35);transition:transform .15s,box-shadow .2s}
-.play-all-btn:hover{transform:translateY(-2px);box-shadow:0 6px 26px rgba(255,107,107,.5)}
-.play-all-btn:active{transform:scale(.97)}
-.play-all-btn svg{width:15px;height:15px;fill:#fff;flex-shrink:0}
+.btn-stop{
+  background:rgba(255,255,255,.05); color:var(--muted);
+  border:1px solid var(--border); border-radius:50px; padding:11px 22px;
+  font-family:'Outfit',sans-serif; font-size:.9rem; font-weight:500;
+  cursor:pointer; display:none; align-items:center; gap:7px;
+  transition:background .2s;
+}
+.btn-stop.on{ display:flex; }
+.btn-stop:hover{ background:rgba(255,255,255,.09); }
 
-.stop-btn{background:rgba(255,255,255,.06);color:var(--muted);border:1.5px solid var(--border);border-radius:50px;padding:11px 22px;font-family:'DM Sans',sans-serif;font-size:.93rem;font-weight:500;cursor:pointer;display:none;align-items:center;gap:7px;transition:background .2s}
-.stop-btn.visible{display:flex}
-.stop-btn:hover{background:rgba(255,255,255,.1)}
+.pill{
+  display:flex; align-items:center; gap:8px;
+  background:var(--card2); border:1px solid var(--border);
+  border-radius:50px; padding:8px 16px;
+}
+.pill label{ font-size:.68rem; color:var(--muted); white-space:nowrap; }
+input[type=range]{
+  -webkit-appearance:none; appearance:none;
+  width:76px; height:3px; background:var(--border);
+  border-radius:2px; outline:none; cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:13px; height:13px; border-radius:50%;
+  background:linear-gradient(135deg,var(--L),var(--G)); cursor:pointer;
+}
+#spv{ font-size:.68rem; color:var(--text); min-width:28px; text-align:right; }
 
-.pill{display:flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--border);border-radius:50px;padding:7px 14px}
-.pill label{font-size:.7rem;color:var(--muted);white-space:nowrap}
-input[type=range]{-webkit-appearance:none;appearance:none;width:78px;height:4px;background:var(--border);border-radius:2px;outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:14px;height:14px;border-radius:50%;background:linear-gradient(135deg,var(--linda),var(--glynda));cursor:pointer}
-#speed-val{font-size:.7rem;color:var(--text);min-width:30px;text-align:right}
-select{background:transparent;border:none;outline:none;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.7rem;cursor:pointer;max-width:130px}
-select option{background:#1c2033}
+/* ── LEGEND ── */
+.legend{ position:relative; z-index:1; display:flex; justify-content:center; gap:22px; flex-wrap:wrap; padding:0 16px 22px; }
+.leg{ display:flex; align-items:center; gap:7px; font-size:.7rem; color:var(--muted); }
+.sw{ width:20px; height:7px; border-radius:3px; }
+.sw.L{ background:linear-gradient(90deg,var(--L),var(--L2)); }
+.sw.G{ background:linear-gradient(90deg,var(--G),var(--G2)); }
 
-.dialogue{display:flex;flex-direction:column;gap:12px;max-width:680px;margin:0 auto;padding:0 14px}
-.line{display:flex;align-items:flex-start;gap:9px}
-.line.glynda{flex-direction:row-reverse}
+/* ── DIALOGUE ── */
+.dlg{ position:relative; z-index:1; display:flex; flex-direction:column; gap:13px; max-width:680px; margin:0 auto; padding:0 14px; }
+.row{ display:flex; align-items:flex-start; gap:9px; }
+.row.G{ flex-direction:row-reverse; }
 
-.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:.95rem;font-weight:700;flex-shrink:0;margin-top:5px;transition:box-shadow .3s}
-.avatar.linda{background:rgba(255,107,107,.14);color:var(--linda);border:2px solid rgba(255,107,107,.35)}
-.avatar.glynda{background:rgba(78,205,196,.12);color:var(--glynda);border:2px solid rgba(78,205,196,.3)}
-.avatar.pulse-linda{box-shadow:0 0 0 4px rgba(255,107,107,.35)}
-.avatar.pulse-glynda{box-shadow:0 0 0 4px rgba(78,205,196,.35)}
+/* Avatar */
+.av{
+  width:38px; height:38px; border-radius:50%; flex-shrink:0; margin-top:5px;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond',serif; font-size:.95rem; font-weight:600; font-style:italic;
+  transition:box-shadow .3s;
+}
+.row.L .av{ background:rgba(232,97,74,.12); color:var(--L); border:1.5px solid rgba(232,97,74,.28); }
+.row.G .av{ background:rgba(46,196,182,.1);  color:var(--G); border:1.5px solid rgba(46,196,182,.25); }
+.row.L.speaking .av{ box-shadow:0 0 0 3px rgba(232,97,74,.3); }
+.row.G.speaking .av{ box-shadow:0 0 0 3px rgba(46,196,182,.28); }
 
-.bubble{background:var(--card);border:1.5px solid var(--border);border-radius:20px;padding:10px 13px;max-width:calc(100% - 54px);transition:border-color .3s,box-shadow .3s,background .3s}
-.bubble.active-linda{border-color:rgba(255,107,107,.6);box-shadow:0 0 20px rgba(255,107,107,.2);background:#191522}
-.bubble.active-glynda{border-color:rgba(78,205,196,.55);box-shadow:0 0 20px rgba(78,205,196,.18);background:#131d21}
+/* Bubble */
+.bub{
+  background:var(--card); border:1px solid var(--border); border-radius:18px;
+  padding:10px 13px; max-width:calc(100% - 52px);
+  transition:border-color .3s, box-shadow .3s, background .3s;
+}
+.row.L.speaking .bub{ border-color:rgba(232,97,74,.5); box-shadow:0 0 18px rgba(232,97,74,.13); background:#160f10; }
+.row.G.speaking .bub{ border-color:rgba(46,196,182,.45); box-shadow:0 0 18px rgba(46,196,182,.1);  background:#0d1a1c; }
 
-.bubble-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px}
-.speaker-name{font-size:.65rem;font-weight:600;letter-spacing:1.8px;text-transform:uppercase}
-.speaker-name.linda{color:var(--linda)}
-.speaker-name.glynda{color:var(--glynda)}
-.header-right{display:flex;align-items:center;gap:6px}
+.bh{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.sn{ font-size:.62rem; font-weight:600; letter-spacing:1.8px; text-transform:uppercase; }
+.row.L .sn{ color:var(--L); }
+.row.G .sn{ color:var(--G); }
+.hr{ display:flex; align-items:center; gap:6px; }
 
-@keyframes wave{0%,100%{transform:scaleY(1)}50%{transform:scaleY(2.8)}}
-.wave-bars{display:none;gap:2px;align-items:center;height:12px}
-.wave-bars.on{display:flex}
-.wave-bars span{display:block;width:2.5px;height:5px;border-radius:2px;animation:wave .45s ease-in-out infinite}
-.line.linda .wave-bars span{background:var(--linda)}
-.line.glynda .wave-bars span{background:var(--glynda)}
-.wave-bars span:nth-child(2){animation-delay:.09s}
-.wave-bars span:nth-child(3){animation-delay:.18s}
-.wave-bars span:nth-child(4){animation-delay:.27s}
+/* Wave bars */
+@keyframes wb{ 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(2.8)} }
+.wv{ display:none; gap:2px; align-items:center; height:12px; }
+.wv.on{ display:flex; }
+.wv span{ display:block; width:2px; height:5px; border-radius:2px; animation:wb .42s ease-in-out infinite; }
+.row.L .wv span{ background:var(--L); }
+.row.G .wv span{ background:var(--G); }
+.wv span:nth-child(2){ animation-delay:.08s; }
+.wv span:nth-child(3){ animation-delay:.16s; }
+.wv span:nth-child(4){ animation-delay:.24s; }
 
-.play-btn{width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s,opacity .2s}
-.play-btn:hover{transform:scale(1.14);opacity:.85}
-.play-btn:active{transform:scale(.92)}
-.play-btn svg{width:10px;height:10px}
-.play-btn.linda{background:rgba(255,107,107,.2)}
-.play-btn.glynda{background:rgba(78,205,196,.18)}
+/* Line play btn */
+.lbtn{
+  width:25px; height:25px; border-radius:50%; border:none; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  transition:transform .15s, opacity .2s;
+}
+.lbtn:hover{ transform:scale(1.13); opacity:.85; }
+.lbtn svg{ width:9px; height:9px; }
+.row.L .lbtn{ background:rgba(232,97,74,.2); }
+.row.G .lbtn{ background:rgba(46,196,182,.18); }
 
-.bubble-text{font-size:.95rem;line-height:1.78;font-weight:300;color:var(--text)}
-.word{display:inline;border-radius:5px;padding:1px 3px;transition:color .08s}
+/* Words */
+.txt{ font-size:.94rem; line-height:1.82; font-weight:300; color:var(--text); }
+.w{ display:inline; border-radius:5px; padding:1px 2px; transition:color .06s; }
 
-@keyframes wordPop{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
-.word.hi-linda{display:inline-block;background:linear-gradient(135deg,rgba(255,107,107,.3),rgba(255,160,0,.25));color:#ffd4a0!important;font-weight:600;text-shadow:0 0 12px rgba(255,130,0,.7);border-radius:6px;animation:wordPop .22s cubic-bezier(.34,1.56,.64,1);outline:1px solid rgba(255,140,0,.35)}
-.word.hi-glynda{display:inline-block;background:linear-gradient(135deg,rgba(78,205,196,.28),rgba(69,183,209,.25));color:#a8fff8!important;font-weight:600;text-shadow:0 0 12px rgba(78,205,196,.8);border-radius:6px;animation:wordPop .22s cubic-bezier(.34,1.56,.64,1);outline:1px solid rgba(78,205,196,.4)}
-.word.done-linda{color:rgba(255,150,100,.5)}
-.word.done-glynda{color:rgba(78,205,196,.45)}
+@keyframes wp{ 0%{transform:scale(1)} 38%{transform:scale(1.16)} 100%{transform:scale(1)} }
+.w.hl{ display:inline-block; animation:wp .21s cubic-bezier(.34,1.56,.64,1); }
+.row.L .w.hl{
+  background:linear-gradient(135deg,rgba(232,97,74,.28),rgba(245,160,90,.22));
+  color:#ffd0a5 !important; font-weight:500;
+  text-shadow:0 0 14px rgba(232,97,74,.55);
+  outline:1px solid rgba(232,97,74,.32); border-radius:6px;
+}
+.row.G .w.hl{
+  background:linear-gradient(135deg,rgba(46,196,182,.25),rgba(72,169,230,.2));
+  color:#a6f5ef !important; font-weight:500;
+  text-shadow:0 0 14px rgba(46,196,182,.65);
+  outline:1px solid rgba(46,196,182,.35); border-radius:6px;
+}
+.w.done{ opacity:.45; }
 
-.qr-section{max-width:680px;margin:56px auto 0;padding:0 16px;text-align:center}
-.qr-section h2{font-family:'Playfair Display',serif;font-size:1.1rem;margin-bottom:4px}
-.qr-section p{color:var(--muted);font-size:.76rem;margin-bottom:16px}
-#qrcode{display:inline-block;background:#fff;padding:12px;border-radius:14px;box-shadow:0 4px 28px rgba(0,0,0,.6)}
+/* ── QR ── */
+.qr-wrap{ position:relative; z-index:1; max-width:680px; margin:56px auto 0; padding:0 16px; text-align:center; }
+.qr-wrap h2{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.2rem; margin-bottom:4px; }
+.qr-wrap p{ color:var(--muted); font-size:.74rem; margin-bottom:16px; }
+#qr{ display:inline-block; background:#fff; padding:12px; border-radius:14px; box-shadow:0 6px 32px rgba(0,0,0,.55); }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Linda &amp; Glynda</h1>
-  <p>English Dialogue · Words highlight in sync with speech</p>
+  <p>English Dialogue · Words glow in sync with speech</p>
 </header>
-<div id="tts-status">⏳ Loading voices…</div>
+<div id="sts">⏳ Loading voices…</div>
 
 <div class="legend">
-  <div class="legend-item"><div class="swatch linda"></div><span>Linda</span></div>
-  <div class="legend-item"><div class="swatch glynda"></div><span>Glynda</span></div>
+  <div class="leg"><div class="sw L"></div><span>Linda — warm &amp; expressive</span></div>
+  <div class="leg"><div class="sw G"></div><span>Glynda — calm &amp; measured</span></div>
 </div>
 
-<div class="controls">
-  <button class="play-all-btn" id="playAllBtn" onclick="playAll()">
+<div class="ctrl">
+  <button class="btn-play" id="btnPlay" onclick="playAll()">
     <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
     Play Full Dialogue
   </button>
-  <button class="stop-btn" id="stopBtn" onclick="stopAll()">■ Stop</button>
-
+  <button class="btn-stop" id="btnStop" onclick="stopAll()">■ Stop</button>
   <div class="pill">
-    <label for="speedRange">Speed</label>
-    <input type="range" id="speedRange" min="0.5" max="1.2" step="0.05" value="0.82"
-           oninput="document.getElementById('speed-val').textContent=parseFloat(this.value).toFixed(2)+'×'">
-    <span id="speed-val">0.82×</span>
-  </div>
-
-  <div class="pill" id="voiceWrap" style="display:none">
-    <label>Linda</label>
-    <select id="voiceLinda"  onchange="voiceOverride.Linda=this.value||null"></select>
-    <label style="margin-left:6px">Glynda</label>
-    <select id="voiceGlynda" onchange="voiceOverride.Glynda=this.value||null"></select>
+    <label for="spRange">Speed</label>
+    <input type="range" id="spRange" min="0.55" max="1.15" step="0.05" value="0.78"
+           oninput="document.getElementById('spv').textContent=parseFloat(this.value).toFixed(2)+'×'">
+    <span id="spv">0.78×</span>
   </div>
 </div>
 
-<div class="dialogue" id="dialogue"></div>
+<div class="dlg" id="dlg"></div>
 
-<div class="qr-section">
+<div class="qr-wrap">
   <h2>📱 Share this Dialogue</h2>
   <p>Scan to open on any device</p>
-  <div id="qrcode"></div>
+  <div id="qr"></div>
 </div>
 
 <script>
-// ═══════════════════════════════════════════
-// SAFETY: check TTS support immediately
-// ═══════════════════════════════════════════
-var TTS = (typeof window !== 'undefined' && 'speechSynthesis' in window)
-          ? window.speechSynthesis : null;
-
-var statusEl = document.getElementById('tts-status');
-
-if (!TTS) {
-  statusEl.textContent = '⚠️ Speech not supported on this browser.';
-}
-
-// ═══════════════════════════════════════════
-// DATA
-// ═══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  DIALOGUE DATA
+// ══════════════════════════════════════════════════════
 var LINES = [
-  { speaker:'Linda',  text:'Hi Glynda, how are you?' },
-  { speaker:'Glynda', text:"Hi Linda. I'm okay, just a little tired." },
-  { speaker:'Linda',  text:"I understand. I love my job, but my days are very busy." },
-  { speaker:'Glynda', text:"I have a good job. I make a lot of money, but I'm not happy." },
-  { speaker:'Linda',  text:'Really? Why not?' },
-  { speaker:'Glynda', text:"I work a lot. I don't have much time for my son." },
-  { speaker:'Linda',  text:'I see. I have three children, and I spend a lot of time with them.' },
-  { speaker:'Glynda', text:'That is very good. I have one son, and I want to spend more time with him.' },
-  { speaker:'Linda',  text:'Maybe you can start with small changes.' },
-  { speaker:'Glynda', text:'Yes, I think I need that.' }
+  { id:0, s:'L', name:'Linda',
+    text:'Hi Glynda! How are you doing today?' },
+  { id:1, s:'G', name:'Glynda',
+    text:"Hi Linda. I'm okay, just a little tired." },
+  { id:2, s:'L', name:'Linda',
+    text:"I understand. I love my job, but my days are very busy." },
+  { id:3, s:'G', name:'Glynda',
+    text:"I have a good job and I make a lot of money, but I'm not happy." },
+  { id:4, s:'L', name:'Linda',
+    text:'Really? Why not?' },
+  { id:5, s:'G', name:'Glynda',
+    text:"I work so much. I don't have enough time for my son." },
+  { id:6, s:'L', name:'Linda',
+    text:'I see. I have three children, and I really try to spend a lot of time with them.' },
+  { id:7, s:'G', name:'Glynda',
+    text:'That is wonderful. I have one son, and I want to spend so much more time with him.' },
+  { id:8, s:'L', name:'Linda',
+    text:'Maybe you can start with small changes. It really helps.' },
+  { id:9, s:'G', name:'Glynda',
+    text:"Yes, I think you're right. I really need that." }
 ];
 
-// ═══════════════════════════════════════════
-// TOKENISE — strip punctuation for speech,
-// keep original for display
-// ═══════════════════════════════════════════
-function tokenise(text) {
-  var out = [], re = /\S+/g, m;
-  while ((m = re.exec(text)) !== null) {
-    out.push({
-      display: m[0],               // shown in bubble
-      speak:   m[0].replace(/[^a-zA-Z0-9']/g,''), // spoken (no trailing comma/period)
-      cs:      m.index
-    });
-  }
+// ══════════════════════════════════════════════════════
+//  TOKENISE
+// ══════════════════════════════════════════════════════
+function tokenise(text){
+  var out=[], re=/\S+/g, m;
+  while((m=re.exec(text))!==null) out.push({t:m[0], cs:m.index});
   return out;
 }
+var LINE_DATA = LINES.map(function(l){ return {toks:tokenise(l.text)}; });
 
-var LINE_DATA = LINES.map(function(l) {
-  return { tokens: tokenise(l.text) };
-});
-
-// ═══════════════════════════════════════════
-// BUILD DOM
-// ═══════════════════════════════════════════
+// ══════════════════════════════════════════════════════
+//  BUILD DOM
+// ══════════════════════════════════════════════════════
 (function(){
-  var c = document.getElementById('dialogue');
-  LINES.forEach(function(line, idx) {
-    var cls  = line.speaker.toLowerCase();
-    var toks = LINE_DATA[idx].tokens;
-    var raw  = line.text;
-    var html = '', last = 0;
-    toks.forEach(function(tok, wi) {
-      if (tok.cs > last) html += raw.slice(last, tok.cs);
-      html += '<span class="word" id="w-'+idx+'-'+wi+'">'+tok.display+'</span>';
-      last = tok.cs + tok.display.length;
+  var c=document.getElementById('dlg');
+  LINES.forEach(function(line){
+    var toks=LINE_DATA[line.id].toks, raw=line.text;
+    var html='', last=0;
+    toks.forEach(function(tok,wi){
+      if(tok.cs>last) html+=raw.slice(last,tok.cs);
+      html+='<span class="w" id="w-'+line.id+'-'+wi+'">'+tok.t+'</span>';
+      last=tok.cs+tok.t.length;
     });
-    if (last < raw.length) html += raw.slice(last);
-    var fill = cls==='linda' ? '#ff6b6b' : '#4ecdc4';
-    var div  = document.createElement('div');
-    div.className = 'line '+cls;
-    div.id = 'line-'+idx;
-    div.innerHTML =
-      '<div class="avatar '+cls+'" id="av-'+idx+'">'+line.speaker[0]+'</div>'+
-      '<div class="bubble" id="bub-'+idx+'">'+
-        '<div class="bubble-header">'+
-          '<span class="speaker-name '+cls+'">'+line.speaker.toUpperCase()+'</span>'+
-          '<div class="header-right">'+
-            '<div class="wave-bars" id="wv-'+idx+'"><span></span><span></span><span></span><span></span></div>'+
-            '<button class="play-btn '+cls+'" onclick="speakLine('+idx+',null,true)" title="Play">'+
+    if(last<raw.length) html+=raw.slice(last);
+
+    var fill=line.s==='L'?'#e8614a':'#2ec4b6';
+    var div=document.createElement('div');
+    div.className='row '+line.s; div.id='row-'+line.id;
+    div.innerHTML=
+      '<div class="av">'+line.name[0]+'</div>'+
+      '<div class="bub" id="bub-'+line.id+'">'+
+        '<div class="bh">'+
+          '<span class="sn">'+line.name+'</span>'+
+          '<div class="hr">'+
+            '<div class="wv" id="wv-'+line.id+'">'+
+              '<span></span><span></span><span></span><span></span>'+
+            '</div>'+
+            '<button class="lbtn" onclick="playSingle('+line.id+',true)" title="Play">'+
               '<svg viewBox="0 0 24 24" fill="'+fill+'"><path d="M8 5v14l11-7z"/></svg>'+
             '</button>'+
           '</div>'+
         '</div>'+
-        '<p class="bubble-text" id="txt-'+idx+'">'+html+'</p>'+
+        '<p class="txt" id="txt-'+line.id+'">'+html+'</p>'+
       '</div>';
     c.appendChild(div);
   });
 })();
 
-// ═══════════════════════════════════════════
-// HIGHLIGHT
-// ═══════════════════════════════════════════
-function getSpans(idx) {
-  var p = document.getElementById('txt-'+idx);
-  return p ? Array.from(p.querySelectorAll('.word')) : [];
-}
-function clearLine(idx)       { getSpans(idx).forEach(function(s){s.className='word';}); }
-function markDone(idx, cls)   { getSpans(idx).forEach(function(s){s.className='word done-'+cls;}); }
-function hlWord(li, wi, cls) {
-  getSpans(li).forEach(function(s, i) {
-    if      (i < wi)  s.className = 'word done-'+cls;
-    else if (i === wi){ s.className = 'word hi-'+cls; bump(s); }
-    else              s.className = 'word';
+// ══════════════════════════════════════════════════════
+//  HIGHLIGHT HELPERS
+// ══════════════════════════════════════════════════════
+function getSpans(id){ var p=document.getElementById('txt-'+id); return p?Array.from(p.querySelectorAll('.w')):[];}
+function clearLine(id){ getSpans(id).forEach(function(s){s.className='w';}); }
+function markDone(id){ getSpans(id).forEach(function(s){s.className='w done';}); }
+
+function hlWord(id, wi){
+  getSpans(id).forEach(function(s,i){
+    if(i<wi)       { s.className='w done'; }
+    else if(i===wi){ s.className='w hl'; bumpAnim(s); }
+    else           { s.className='w'; }
   });
 }
-function bump(el) {
-  el.style.animationName = 'none';
-  requestAnimationFrame(function(){
-    requestAnimationFrame(function(){ el.style.animationName = ''; });
-  });
-}
-function setBubble(idx, on, cls) {
-  var b=document.getElementById('bub-'+idx);
-  var w=document.getElementById('wv-'+idx);
-  var a=document.getElementById('av-'+idx);
-  if(b){ b.classList.remove('active-linda','active-glynda'); if(on) b.classList.add('active-'+cls); }
-  if(w){ if(on) w.classList.add('on'); else w.classList.remove('on'); }
-  if(a){ a.classList.remove('pulse-linda','pulse-glynda'); if(on) a.classList.add('pulse-'+cls); }
-}
-function resetAll() {
-  LINES.forEach(function(_, idx){
-    clearLine(idx);
-    setBubble(idx, false, LINES[idx].speaker.toLowerCase());
-  });
+function bumpAnim(el){
+  el.style.animationName='none';
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.style.animationName=''; }); });
 }
 
-// ═══════════════════════════════════════════
-// VOICES
-// ═══════════════════════════════════════════
-var voices = [], voiceOverride = { Linda:null, Glynda:null };
-
-function safeGetVoices() {
-  try { return (TTS && TTS.getVoices()) || []; } catch(e) { return []; }
+function setActive(id, on){
+  var row=document.getElementById('row-'+id);
+  var wv =document.getElementById('wv-'+id);
+  if(row){ if(on) row.classList.add('speaking'); else row.classList.remove('speaking'); }
+  if(wv) { if(on) wv.classList.add('on');        else wv.classList.remove('on'); }
+}
+function resetAll(){
+  LINES.forEach(function(l){ clearLine(l.id); setActive(l.id,false); });
 }
 
-function loadVoices() {
-  if (!TTS) return;
-  var v = safeGetVoices();
-  if (!v.length) return;
-  voices = v;
-  statusEl.textContent = '✓ '+v.length+' voices ready';
-  setTimeout(function(){ statusEl.textContent=''; }, 2500);
-  buildSelects();
+// charIndex → token index within line
+function charToTok(id, ci){
+  var toks=LINE_DATA[id].toks, b=0;
+  for(var i=0;i<toks.length;i++){ if(toks[i].cs<=ci) b=i; else break; }
+  return b;
 }
 
-function buildSelects() {
-  var en = voices.filter(function(v){ return /en/i.test(v.lang); });
-  if (!en.length) en = voices;
-  var sL = document.getElementById('voiceLinda');
-  var sG = document.getElementById('voiceGlynda');
-  sL.innerHTML = sG.innerHTML = '<option value="">Auto</option>';
-  en.forEach(function(v){
-    sL.add(new Option(v.name, v.name));
-    sG.add(new Option(v.name, v.name));
-  });
-  document.getElementById('voiceWrap').style.display = en.length>1 ? 'flex' : 'none';
+// ══════════════════════════════════════════════════════
+//  VOICE SELECTION
+//  Strategy: differentiate Linda vs Glynda maximally.
+//  Linda  → first female voice found (bright/higher pitch)
+//  Glynda → look for a different voice, prefer male or
+//            second female (slower/lower pitch)
+// ══════════════════════════════════════════════════════
+var TTS = ('speechSynthesis' in window) ? window.speechSynthesis : null;
+var voices=[];
+var stsEl=document.getElementById('sts');
+
+function safeVoices(){ try{ return (TTS&&TTS.getVoices())||[]; }catch(e){ return []; } }
+
+function loadVoices(){
+  var v=safeVoices(); if(!v.length) return;
+  voices=v;
+  stsEl.textContent='✓ '+v.length+' voices ready';
+  setTimeout(function(){ stsEl.textContent=''; },2500);
 }
 
-function pickVoice(speaker) {
-  var ov = voiceOverride[speaker];
-  if (ov) { var f = voices.find(function(v){return v.name===ov;}); if(f) return f; }
-  if (!voices.length) voices = safeGetVoices();
-  var en = voices.filter(function(v){ return /en/i.test(v.lang); });
-  if (!en.length) en = voices;
-  if (!en.length) return null;
-  var femRe = /female|zira|samantha|victoria|fiona|karen|moira|tessa|allison|ava|kate|emma|amy|joanna|kendra|kimberly|salli|ivy|google\s+us/i;
-  var fem = en.filter(function(v){ return femRe.test(v.name); });
-  if (speaker==='Linda') return fem[0]||en[0];
-  var alt = fem.filter(function(v){ return v!==(fem[0]||en[0]); });
-  return alt[0]||fem[1]||en[1]||en[0];
-}
-
-if (TTS) {
+if(!TTS){ stsEl.textContent='⚠️ Speech not supported on this browser.'; }
+else{
   loadVoices();
-  try {
-    if ('onvoiceschanged' in TTS) TTS.onvoiceschanged = loadVoices;
-  } catch(e){}
-  var _poll = setInterval(function(){
-    if (voices.length) { clearInterval(_poll); return; }
-    loadVoices();
-  }, 250);
-  setTimeout(function(){ clearInterval(_poll); }, 8000);
+  try{ if('onvoiceschanged' in TTS) TTS.onvoiceschanged=loadVoices; }catch(e){}
+  var _p=setInterval(function(){ if(voices.length)clearInterval(_p); else loadVoices(); },250);
+  setTimeout(function(){ clearInterval(_p); },8000);
 }
 
-// ═══════════════════════════════════════════
-// ENGINE
-//
-// Core strategy: speak WORD BY WORD.
-// Each word = one SpeechSynthesisUtterance.
-// onend fires reliably on every platform
-// including Android WebView / Samsung Browser.
-//
-// Natural prosody is preserved via:
-//   • speaking cleaned word text (no trailing punctuation)
-//   • inserting calibrated pauses between words
-//   • inserting longer pauses at clause/sentence boundaries
-//
-// Pause lengths are scaled by speech rate so
-// rhythm feels natural at any speed setting.
-// ═══════════════════════════════════════════
+// Pick the most natural-sounding English voices and keep them stable
+var _voiceCache={L:null,G:null};
 
-var isRunning = false;
-var stopFlag  = false;
-var kaTimer   = null;
+function pickVoices(){
+  if(_voiceCache.L&&_voiceCache.G) return;
+  if(!voices.length) voices=safeVoices();
 
-// Flat queue: each entry = one word to speak
-// { li, wi, cls, speak, isLast, pauseAfter }
-var wordQueue = [];
+  // All english voices
+  var en=voices.filter(function(v){ return /en[-_]/i.test(v.lang)||v.lang==='en'; });
+  if(!en.length) en=voices;
+  if(!en.length) return;
 
-function startKA() {
+  // Prefer "natural" / "neural" / "premium" voices when available
+  var pref=/natural|neural|premium|enhanced|wavenet|studio|journey/i;
+  var femRe=/female|woman|zira|samantha|victoria|fiona|karen|moira|tessa|allison|ava|kate|emma|amy|joanna|kendra|kimberly|salli|ivy|aria|jenny|michelle|sonia|libby|maisie|eloquence|google\s+us\s+english|google\s+uk\s+english/i;
+  var malRe=/male|man|guy|david|mark|james|ryan|guy|arthur|christopher|eric|liam|matthew|stephan|thomas|brian/i;
+
+  var premium=en.filter(function(v){ return pref.test(v.name); });
+  var fem    =en.filter(function(v){ return femRe.test(v.name); });
+  var male   =en.filter(function(v){ return malRe.test(v.name); });
+
+  // Linda: first premium female, else first female, else first voice
+  _voiceCache.L = (premium.filter(function(v){return femRe.test(v.name);})[0])
+               || fem[0]
+               || en[0];
+
+  // Glynda: try to pick a DIFFERENT voice — prefer male or second female
+  var notLinda=en.filter(function(v){ return v!==_voiceCache.L; });
+  _voiceCache.G = male[0]
+              || (premium.filter(function(v){return malRe.test(v.name);})[0])
+              || notLinda.filter(function(v){ return femRe.test(v.name); })[0]
+              || notLinda[0]
+              || en[1]
+              || en[0];
+}
+
+function getVoice(s){ pickVoices(); return s==='L'?_voiceCache.L:_voiceCache.G; }
+
+// ══════════════════════════════════════════════════════
+//  ENGINE
+//
+//  Each LINE is spoken as ONE utterance (full sentence).
+//  → Natural prosody, intonation, rhythm preserved.
+//
+//  SYNC STRATEGY (two-tier):
+//
+//  Tier 1 · onboundary (Chrome desktop, Edge, Firefox)
+//    Exact character offset → word index → highlight.
+//    Self-disables timer if it fires.
+//
+//  Tier 2 · Adaptive rAF-driven timer (mobile/Safari)
+//    onstart records t0 = performance.now().
+//    Each animation frame checks elapsed time and
+//    steps through words using proportional character
+//    offsets as a fraction of total utterance length.
+//    Calibrates ms-per-char from actual onend duration.
+//
+//  Both tiers run simultaneously; Tier 1 wins when
+//  available, Tier 2 is the reliable mobile fallback.
+//
+//  Voice differentiation:
+//    Linda  pitch=1.12  rate×1.00  (bright, expressive)
+//    Glynda pitch=0.82  rate×0.93  (calm, lower, slower)
+// ══════════════════════════════════════════════════════
+
+var isRunning=false, stopFlag=false, kaTimer=null, rafId=null;
+
+// Calibrated ms-per-char (updated after each line via onend)
+var msPerChar={L:68, G:72};
+
+function startKA(){
   stopKA();
-  kaTimer = setInterval(function(){
-    if (TTS && TTS.paused) { try{ TTS.resume(); }catch(e){} }
-  }, 3000);
+  kaTimer=setInterval(function(){ if(TTS&&TTS.paused){ try{TTS.resume();}catch(e){} } },3500);
 }
-function stopKA() {
-  if (kaTimer) { clearInterval(kaTimer); kaTimer = null; }
-}
-function getRate() {
-  return parseFloat(document.getElementById('speedRange').value) || 0.82;
-}
+function stopKA(){ if(kaTimer){clearInterval(kaTimer);kaTimer=null;} }
+function stopRaf(){ if(rafId){cancelAnimationFrame(rafId);rafId=null;} }
+function getRate(){ return parseFloat(document.getElementById('spRange').value)||0.78; }
 
-// Pause after a word (ms), factoring in punctuation and rate
-function pauseAfterWord(word, isLastOfLine, rate) {
-  if (isLastOfLine)              return Math.round(700 / rate);   // between turns
-  if (/[.?!]$/.test(word))      return Math.round(320 / rate);   // sentence end
-  if (/[,;:]$/.test(word))      return Math.round(160 / rate);   // clause pause
-  return Math.round(55 / rate);                                   // normal gap
-}
+// ── Speak one full sentence ───────────────────
+function speakSentence(lineId, onEnd){
+  if(!TTS){ if(onEnd)onEnd(); return; }
 
-// Build flat word queue for a range of lines
-function buildWordQueue(from, to) {
-  var q = [];
-  for (var li = from; li <= to; li++) {
-    var toks = LINE_DATA[li].tokens;
-    var cls  = LINES[li].speaker.toLowerCase();
-    toks.forEach(function(tok, wi) {
-      var isLast = (wi === toks.length-1);
-      q.push({
-        li:    li,
-        wi:    wi,
-        cls:   cls,
-        speak: tok.speak || tok.display,   // cleaned text
-        raw:   tok.display,
-        isFirstOfLine: wi === 0,
-        isLastOfLine:  isLast,
-        pauseAfter: pauseAfterWord(tok.display, isLast, getRate())
-      });
-    });
+  var line = LINES[lineId];
+  var toks = LINE_DATA[lineId].toks;
+  var raw  = line.text;
+  var s    = line.s;
+  var rate = getRate();
+
+  // Voice-specific adjustments
+  var pitch= s==='L' ? 1.12 : 0.82;
+  var rAdj = s==='L' ? 1.00 : 0.93; // Glynda speaks a touch slower
+  var voice= getVoice(s);
+
+  var utter=new SpeechSynthesisUtterance(raw);
+  if(voice) utter.voice=voice;
+  utter.lang ='en-US';
+  utter.rate  =rate*rAdj;
+  utter.pitch =pitch;
+  utter.volume=1;
+
+  var t0=0, totalMs=0, boundaryFired=false, doneCalled=false;
+  var rafActive=false;
+
+  function finish(elapsed){
+    if(doneCalled) return;
+    doneCalled=true;
+    stopRaf();
+    // Calibrate ms/char from real duration
+    var totalChars=raw.replace(/\s/g,'').length;
+    if(elapsed>200&&totalChars>0){
+      var measured=(elapsed/totalChars)*(rate*rAdj);
+      msPerChar[s]=msPerChar[s]*0.55+measured*0.45;
+    }
+    markDone(lineId);
+    setActive(lineId,false);
+    if(onEnd) setTimeout(onEnd,0);
   }
-  return q;
+
+  // ── Tier 2: rAF proportional timer ──────────
+  // Uses fraction of total estimated duration to
+  // step word highlights frame-by-frame.
+  function startRaf(){
+    if(rafActive) return;
+    rafActive=true;
+    var estMs=(raw.length * msPerChar[s]) / (rate*rAdj);
+    var lastWi=-1;
+    function frame(){
+      if(stopFlag||boundaryFired){ stopRaf(); return; }
+      var elapsed=performance.now()-t0;
+      var frac=Math.min(elapsed/estMs, 1);
+      // Find which word should be highlighted at this fraction
+      // Use char offset as proxy: word charStart/totalLen ~ frac
+      var totalLen=raw.length;
+      var wi=0;
+      for(var i=0;i<toks.length;i++){
+        if(toks[i].cs/totalLen<=frac) wi=i;
+        else break;
+      }
+      if(wi!==lastWi){ hlWord(lineId,wi); lastWi=wi; }
+      if(frac<1) rafId=requestAnimationFrame(frame);
+    }
+    rafId=requestAnimationFrame(frame);
+  }
+
+  utter.onstart=function(){
+    t0=performance.now();
+    startRaf();
+  };
+
+  // ── Tier 1: onboundary ───────────────────────
+  utter.onboundary=function(e){
+    if(e.name!=='word') return;
+    if(!boundaryFired){
+      boundaryFired=true;
+      stopRaf(); // Tier 1 is more accurate; kill Tier 2
+    }
+    hlWord(lineId, charToTok(lineId, e.charIndex));
+  };
+
+  utter.onend=function(){
+    stopRaf();
+    if(stopFlag){ if(!doneCalled){doneCalled=true;} return; }
+    finish(performance.now()-t0);
+  };
+
+  utter.onerror=function(e){
+    stopRaf();
+    console.warn('TTS:',e.error,'|',raw);
+    if(!doneCalled){ doneCalled=true; if(onEnd) onEnd(); }
+  };
+
+  try{ TTS.speak(utter); }catch(e){ if(onEnd) onEnd(); }
 }
 
-// ─── Speak next word in queue ───────────────
-function nextWord() {
-  if (stopFlag || !isRunning || wordQueue.length === 0) {
-    isRunning = false; stopFlag = false;
-    stopKA();
-    document.getElementById('stopBtn').classList.remove('visible');
+// ══════════════════════════════════════════════════════
+//  QUEUE RUNNER
+// ══════════════════════════════════════════════════════
+var queue=[];
+
+function runQueue(){
+  if(stopFlag||!isRunning||!queue.length){
+    isRunning=false; stopFlag=false; stopKA();
+    document.getElementById('btnStop').classList.remove('on');
     return;
   }
+  var id=queue.shift();
+  var row=document.getElementById('row-'+id);
+  if(row){ setActive(id,true); row.scrollIntoView({behavior:'smooth',block:'center'}); }
+  hlWord(id,0);
 
-  var item = wordQueue.shift();
-  var li   = item.li;
-  var wi   = item.wi;
-  var cls  = item.cls;
-
-  // First word of a new line: activate bubble & scroll
-  if (item.isFirstOfLine) {
-    resetAll();
-    setBubble(li, true, cls);
-    var el = document.getElementById('line-'+li);
-    if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
-  }
-
-  // Highlight this word immediately (before sound starts)
-  hlWord(li, wi, cls);
-
-  // Build utterance for this single word
-  var speakText = item.speak;
-  // If word is empty after stripping (e.g. "..." alone), use a pause char
-  if (!speakText) speakText = '.';
-
-  var rate  = getRate();
-  var voice = pickVoice(LINES[li].speaker);
-  var utter = new SpeechSynthesisUtterance(speakText);
-  if (voice)   utter.voice = voice;
-  utter.lang   = 'en-US';
-  utter.rate   = rate;
-  utter.pitch  = cls==='linda' ? 1.08 : 0.91;
-  utter.volume = 1;
-
-  utter.onend = function() {
-    if (stopFlag) { doStop(); return; }
-
-    // If last word of line: mark done, close bubble
-    if (item.isLastOfLine) {
-      markDone(li, cls);
-      setBubble(li, false, cls);
-      if (typeof item._lineDone === 'function') item._lineDone();
-    }
-
-    // Pause then speak next word
-    var pause = item.pauseAfter;
-    if (pause > 0) {
-      setTimeout(nextWord, pause);
-    } else {
-      nextWord();
-    }
-  };
-
-  utter.onerror = function(e) {
-    // Skip word silently on error, keep going
-    if (stopFlag) { doStop(); return; }
-    console.warn('TTS skip:', item.raw, e.error);
-    setTimeout(nextWord, 80);
-  };
-
-  try {
-    TTS.speak(utter);
-  } catch(e) {
-    setTimeout(nextWord, 80);
-  }
+  speakSentence(id, function(){
+    if(stopFlag){ doStop(); return; }
+    // Natural inter-turn pause scaled by rate
+    var rate=getRate();
+    var gap=Math.round(680/rate * Math.min(rate,1));
+    setTimeout(runQueue, gap);
+  });
 }
 
-// ─── Stop everything ────────────────────────
-function doStop() {
-  isRunning = false; stopFlag = false;
-  stopKA();
-  wordQueue = [];
-  try { if(TTS) TTS.cancel(); } catch(e){}
+function doStop(){
+  isRunning=false; stopFlag=false; queue=[];
+  stopKA(); stopRaf();
+  try{ if(TTS) TTS.cancel(); }catch(e){}
   resetAll();
-  document.getElementById('stopBtn').classList.remove('visible');
+  document.getElementById('btnStop').classList.remove('on');
 }
 
-// ═══════════════════════════════════════════
-// PUBLIC API
-// ═══════════════════════════════════════════
-function stopAll() {
-  stopFlag = true;
-  doStop();
+// ══════════════════════════════════════════════════════
+//  PUBLIC API
+// ══════════════════════════════════════════════════════
+function stopAll(){ stopFlag=true; doStop(); }
+
+function playSingle(id, fromBtn){
+  if(!TTS){ stsEl.textContent='⚠️ Speech not supported.'; return; }
+  stopFlag=true; try{TTS.cancel();}catch(e){}
+  setTimeout(function(){
+    resetAll(); stopFlag=false; isRunning=true; queue=[id];
+    if(fromBtn) document.getElementById('btnStop').classList.add('on');
+    startKA(); runQueue();
+  },140);
 }
 
-function speakLine(idx, onDone, fromBtn) {
-  if (!TTS) { statusEl.textContent='⚠️ Speech not supported.'; return; }
-  stopFlag = true;
-  try { TTS.cancel(); } catch(e){}
-  setTimeout(function() {
-    resetAll();
-    stopFlag  = false;
-    isRunning = true;
-    if (fromBtn) document.getElementById('stopBtn').classList.add('visible');
-
-    wordQueue = buildWordQueue(idx, idx);
-
-    // Tag last word to call onDone
-    if (typeof onDone === 'function' && wordQueue.length) {
-      wordQueue[wordQueue.length-1]._lineDone = onDone;
-    }
-
-    startKA();
-    nextWord();
-  }, 160);
+function playAll(){
+  if(!TTS){ stsEl.textContent='⚠️ Speech not supported.'; return; }
+  stopFlag=true; try{TTS.cancel();}catch(e){}
+  setTimeout(function(){
+    resetAll(); stopFlag=false; isRunning=true;
+    queue=LINES.map(function(l){return l.id;});
+    document.getElementById('btnStop').classList.add('on');
+    startKA(); runQueue();
+  },140);
 }
 
-function playAll() {
-  if (!TTS) { statusEl.textContent='⚠️ Speech not supported.'; return; }
-  stopFlag = true;
-  try { TTS.cancel(); } catch(e){}
-  setTimeout(function() {
-    resetAll();
-    stopFlag  = false;
-    isRunning = true;
-    document.getElementById('stopBtn').classList.add('visible');
-    wordQueue = buildWordQueue(0, LINES.length-1);
-    startKA();
-    nextWord();
-  }, 160);
-}
-
-// ═══════════════════════════════════════════
-// CLEANUP + QR
-// ═══════════════════════════════════════════
-window.addEventListener('beforeunload', function() {
-  stopKA();
-  try { if(TTS) TTS.cancel(); } catch(e){}
+// ══════════════════════════════════════════════════════
+//  QR CODE
+// ══════════════════════════════════════════════════════
+window.addEventListener('load',function(){
+  var url=window.location.href.split('?')[0];
+  try{
+    new QRCode(document.getElementById('qr'),{
+      text:url, width:164, height:164,
+      colorDark:'#080c14', colorLight:'#ffffff',
+      correctLevel:QRCode.CorrectLevel.M
+    });
+  }catch(e){ document.getElementById('qr').textContent=url; }
 });
 
-window.addEventListener('load', function() {
-  var url = window.location.href.split('?')[0];
-  try {
-    new QRCode(document.getElementById('qrcode'), {
-      text:url, width:160, height:160,
-      colorDark:'#0d0f18', colorLight:'#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-  } catch(e) { document.getElementById('qrcode').textContent = url; }
+// ══════════════════════════════════════════════════════
+//  CLEANUP
+// ══════════════════════════════════════════════════════
+window.addEventListener('beforeunload',function(){
+  stopKA(); stopRaf();
+  try{ if(TTS) TTS.cancel(); }catch(e){}
 });
 </script>
 </body>
