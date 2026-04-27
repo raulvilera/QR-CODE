@@ -125,24 +125,24 @@
     border-radius: 16px;
     padding: 12px 14px;
     max-width: calc(100% - 64px);
-    transition: border-color .2s;
+    transition: border-color .2s, box-shadow .2s;
   }
 
-  .bubble.speaking {
+  .bubble.speaking-linda {
     border-color: var(--linda-color);
-    box-shadow: 0 0 12px rgba(224,122,95,.2);
+    box-shadow: 0 0 16px rgba(224,122,95,.25);
   }
 
-  .line.glinda .bubble.speaking {
+  .bubble.speaking-glinda {
     border-color: var(--glinda-color);
-    box-shadow: 0 0 12px rgba(129,178,154,.2);
+    box-shadow: 0 0 16px rgba(129,178,154,.25);
   }
 
   .bubble-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     gap: 10px;
   }
 
@@ -175,13 +175,67 @@
   .play-btn.linda  { background: rgba(224,122,95,.25); }
   .play-btn.glinda { background: rgba(129,178,154,.2); }
 
+  /* Word spans */
   .bubble-text {
-    font-size: 0.95rem;
-    line-height: 1.55;
+    font-size: 0.98rem;
+    line-height: 1.7;
     font-weight: 300;
     color: var(--text);
+    word-spacing: 2px;
   }
 
+  .word {
+    display: inline;
+    border-radius: 4px;
+    padding: 1px 2px;
+    transition: background .1s, color .1s, transform .1s;
+    cursor: default;
+  }
+
+  /* Linda word highlight — warm amber glow */
+  .word.active-linda {
+    background: rgba(224, 122, 95, 0.28);
+    color: #ffcbb8;
+    font-weight: 500;
+    text-shadow: 0 0 8px rgba(224,122,95,.6);
+    transform: scale(1.08);
+    display: inline-block;
+  }
+
+  /* Glinda word highlight — cool mint glow */
+  .word.active-glinda {
+    background: rgba(129, 178, 154, 0.25);
+    color: #b8ffd8;
+    font-weight: 500;
+    text-shadow: 0 0 8px rgba(129,178,154,.6);
+    transform: scale(1.08);
+    display: inline-block;
+  }
+
+  /* Already-spoken words get a subtle tint */
+  .word.spoken-linda  { color: rgba(224,122,95,.75); }
+  .word.spoken-glinda { color: rgba(129,178,154,.75); }
+
+  /* Wave animation */
+  @keyframes wave {
+    0%, 100% { transform: scaleY(1); }
+    50%       { transform: scaleY(2.5); }
+  }
+
+  .wave-bars { display: none; gap: 2px; align-items: center; height: 14px; }
+  .wave-bars.active { display: flex; }
+  .wave-bars span {
+    display: block; width: 3px;
+    background: var(--linda-color);
+    border-radius: 2px; height: 7px;
+    animation: wave .55s ease-in-out infinite;
+  }
+  .line.glinda .wave-bars span { background: var(--glinda-color); }
+  .wave-bars span:nth-child(2) { animation-delay: .12s; }
+  .wave-bars span:nth-child(3) { animation-delay: .24s; }
+  .wave-bars span:nth-child(4) { animation-delay: .36s; }
+
+  /* QR */
   .qr-section {
     max-width: 680px;
     margin: 48px auto 0;
@@ -196,11 +250,7 @@
     margin-bottom: 6px;
   }
 
-  .qr-section p {
-    color: var(--muted);
-    font-size: 0.8rem;
-    margin-bottom: 20px;
-  }
+  .qr-section p { color: var(--muted); font-size: 0.8rem; margin-bottom: 20px; }
 
   #qrcode {
     display: inline-block;
@@ -210,40 +260,37 @@
     box-shadow: 0 4px 30px rgba(0,0,0,.5);
   }
 
-  @keyframes wave {
-    0%, 100% { transform: scaleY(1); }
-    50%       { transform: scaleY(2.5); }
+  /* Legend */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 0 16px 24px;
+    flex-wrap: wrap;
   }
 
-  .wave-bars {
-    display: none;
-    gap: 2px;
+  .legend-item {
+    display: flex;
     align-items: center;
-    height: 14px;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--muted);
   }
 
-  .wave-bars.active { display: flex; }
-
-  .wave-bars span {
-    display: block;
-    width: 3px;
-    background: var(--linda-color);
-    border-radius: 2px;
-    height: 7px;
-    animation: wave .55s ease-in-out infinite;
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
   }
 
-  .line.glinda .wave-bars span { background: var(--glinda-color); }
-  .wave-bars span:nth-child(2) { animation-delay: .12s; }
-  .wave-bars span:nth-child(3) { animation-delay: .24s; }
-  .wave-bars span:nth-child(4) { animation-delay: .36s; }
+  .legend-dot.linda  { background: var(--linda-color); }
+  .legend-dot.glinda { background: var(--glinda-color); }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Linda &amp; Glinda</h1>
-  <p>English Dialogue · Tap ▶ to hear each line</p>
+  <p>English Dialogue · Tap ▶ to hear each line · Words highlight as spoken</p>
 </header>
 
 <div id="tts-status">⏳ Loading voices…</div>
@@ -255,16 +302,26 @@
   </button>
 </div>
 
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-dot linda"></div>
+    <span>Linda — warm highlight</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot glinda"></div>
+    <span>Glinda — cool highlight</span>
+  </div>
+</div>
+
 <div class="dialogue" id="dialogue"></div>
 
 <div class="qr-section">
   <h2>📱 Share this Dialogue</h2>
-  <p>Scan the QR Code to open on any device</p>
+  <p>Scan to open on any device</p>
   <div id="qrcode"></div>
 </div>
 
 <script>
-// ── Dialogue data ──────────────────────────────────────────────
 var lines = [
   { speaker: "Linda",  text: "Hi, Glinda. How are you?" },
   { speaker: "Glinda", text: "Hi, Linda. I'm okay… just a little tired." },
@@ -278,21 +335,36 @@ var lines = [
   { speaker: "Glinda", text: "Yes… I think I need that." }
 ];
 
-// ── Build DOM ──────────────────────────────────────────────────
+// ── Build word-span DOM ────────────────────────────────────────
 var container = document.getElementById('dialogue');
 
 for (var i = 0; i < lines.length; i++) {
   (function(idx) {
     var line = lines[idx];
     var cls  = line.speaker.toLowerCase();
-    var init = line.speaker[0];
+
+    // Split text into tokens preserving spaces & punctuation
+    // Each "word" token gets a span; punctuation stays attached
+    var tokens = line.text.split(/(\s+)/);
+    var wordSpans = '';
+    var wordIdx = 0;
+
+    for (var t = 0; t < tokens.length; t++) {
+      var tok = tokens[t];
+      if (/^\s+$/.test(tok)) {
+        wordSpans += tok; // just a space
+      } else {
+        wordSpans += '<span class="word" id="w-' + idx + '-' + wordIdx + '">' + tok + '</span>';
+        wordIdx++;
+      }
+    }
 
     var div = document.createElement('div');
     div.className = 'line ' + cls;
     div.id = 'line-' + idx;
 
     div.innerHTML =
-      '<div class="avatar ' + cls + '">' + init + '</div>' +
+      '<div class="avatar ' + cls + '">' + line.speaker[0] + '</div>' +
       '<div class="bubble" id="bubble-' + idx + '">' +
         '<div class="bubble-header">' +
           '<span class="speaker-name ' + cls + '">' + line.speaker.toUpperCase() + '</span>' +
@@ -305,14 +377,80 @@ for (var i = 0; i < lines.length; i++) {
             '</svg>' +
           '</button>' +
         '</div>' +
-        '<p class="bubble-text">' + line.text + '</p>' +
+        '<p class="bubble-text" id="text-' + idx + '">' + wordSpans + '</p>' +
       '</div>';
 
     container.appendChild(div);
   })(i);
 }
 
-// ── Speech Synthesis — SAFE INIT ───────────────────────────────
+// ── Count word spans per line ──────────────────────────────────
+function getWordCount(idx) {
+  var p = document.getElementById('text-' + idx);
+  if (!p) return 0;
+  return p.querySelectorAll('.word').length;
+}
+
+// ── Clear highlights for a line ────────────────────────────────
+function clearHighlights(idx) {
+  var p = document.getElementById('text-' + idx);
+  if (!p) return;
+  var spans = p.querySelectorAll('.word');
+  for (var i = 0; i < spans.length; i++) {
+    spans[i].className = 'word';
+  }
+}
+
+// ── Highlight a specific word ──────────────────────────────────
+function highlightWord(lineIdx, wordIdx, cls) {
+  var p = document.getElementById('text-' + lineIdx);
+  if (!p) return;
+  var spans = p.querySelectorAll('.word');
+
+  for (var i = 0; i < spans.length; i++) {
+    if (i < wordIdx) {
+      spans[i].className = 'word spoken-' + cls;
+    } else if (i === wordIdx) {
+      spans[i].className = 'word active-' + cls;
+      // Scroll word into view if needed
+      spans[i].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      spans[i].className = 'word';
+    }
+  }
+}
+
+// ── Map charIndex from onboundary to word index ────────────────
+// We pre-compute word char offsets for each line
+var wordOffsets = [];
+
+for (var li = 0; li < lines.length; li++) {
+  var text   = lines[li].text;
+  var tokens = text.split(/(\s+)/);
+  var offsets = [];
+  var pos = 0;
+
+  for (var t = 0; t < tokens.length; t++) {
+    var tok = tokens[t];
+    if (!/^\s+$/.test(tok)) {
+      offsets.push(pos);
+    }
+    pos += tok.length;
+  }
+  wordOffsets.push(offsets);
+}
+
+function charToWordIdx(lineIdx, charIdx) {
+  var offsets = wordOffsets[lineIdx];
+  var best = 0;
+  for (var i = 0; i < offsets.length; i++) {
+    if (offsets[i] <= charIdx) best = i;
+    else break;
+  }
+  return best;
+}
+
+// ── Speech Synthesis ───────────────────────────────────────────
 var voices   = [];
 var isPlayingAll = false;
 var playIdx  = 0;
@@ -332,23 +470,17 @@ function loadVoices() {
 if (!window.speechSynthesis) {
   statusEl.textContent = '⚠️ Speech not supported on this browser.';
 } else {
-  // Initial attempt
   loadVoices();
-
-  // Safe event binding — avoid crash if property doesn't exist
   try {
     if ('onvoiceschanged' in window.speechSynthesis) {
       window.speechSynthesis.onvoiceschanged = loadVoices;
     }
   } catch(e) {}
 
-  // Polling fallback (needed on Android/some mobile browsers)
   var pollCount = 0;
   var pollTimer = setInterval(function() {
     loadVoices();
-    if (voices.length > 0 || pollCount++ > 15) {
-      clearInterval(pollTimer);
-    }
+    if (voices.length > 0 || pollCount++ > 15) clearInterval(pollTimer);
   }, 300);
 }
 
@@ -356,28 +488,23 @@ function pickVoice(speaker) {
   if (!voices.length) {
     try { voices = window.speechSynthesis.getVoices() || []; } catch(e) {}
   }
-
   var enVoices = voices.filter(function(v) { return /en/i.test(v.lang); });
   if (!enVoices.length) enVoices = voices;
   if (!enVoices.length) return null;
 
-  var femaleNames = /female|zira|samantha|victoria|fiona|karen|moira|tessa|allison|ava|susan|kate|emma|amy|joanna|kendra|kimberly|salli|ivy/i;
-  var females = enVoices.filter(function(v) { return femaleNames.test(v.name); });
+  var femaleRe = /female|zira|samantha|victoria|fiona|karen|moira|tessa|allison|ava|kate|emma|amy|joanna|kendra|kimberly|salli|ivy/i;
+  var females  = enVoices.filter(function(v) { return femaleRe.test(v.name); });
 
-  if (speaker === 'Linda') {
-    return females[0] || enVoices[0];
-  } else {
-    // Glinda gets a different voice
-    return females[1] || females[0] || enVoices[1] || enVoices[0];
-  }
+  if (speaker === 'Linda') return females[0] || enVoices[0];
+  return females[1] || females[0] || enVoices[1] || enVoices[0];
 }
 
-function setBubble(idx, active) {
+function setBubble(idx, active, cls) {
   var b = document.getElementById('bubble-' + idx);
   var w = document.getElementById('wave-' + idx);
   if (b) {
-    if (active) b.classList.add('speaking');
-    else b.classList.remove('speaking');
+    b.classList.remove('speaking-linda', 'speaking-glinda');
+    if (active) b.classList.add('speaking-' + cls);
   }
   if (w) {
     if (active) w.classList.add('active');
@@ -393,37 +520,60 @@ function speakLine(idx, onEnd) {
 
   try { window.speechSynthesis.cancel(); } catch(e) {}
 
-  // Clear all bubbles
-  for (var j = 0; j < lines.length; j++) setBubble(j, false);
+  // Reset all
+  for (var j = 0; j < lines.length; j++) {
+    setBubble(j, false, lines[j].speaker.toLowerCase());
+    clearHighlights(j);
+  }
 
-  var line  = lines[idx];
+  var line = lines[idx];
+  var cls  = line.speaker.toLowerCase();
   var utter = new SpeechSynthesisUtterance(line.text);
-  var v     = pickVoice(line.speaker);
+  var v = pickVoice(line.speaker);
 
   if (v) utter.voice = v;
   utter.lang  = 'en-US';
-  utter.rate  = 0.88;
-  utter.pitch = (line.speaker === 'Linda') ? 1.15 : 0.92;
+  utter.rate  = 0.85;
+  utter.pitch = (cls === 'linda') ? 1.15 : 0.92;
 
-  utter.onstart = function() { setBubble(idx, true); };
-  utter.onend   = function() {
-    setBubble(idx, false);
+  utter.onstart = function() {
+    setBubble(idx, true, cls);
+    var el = document.getElementById('line-' + idx);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  // Word-by-word highlight via onboundary
+  utter.onboundary = function(e) {
+    if (e.name === 'word') {
+      var wIdx = charToWordIdx(idx, e.charIndex);
+      highlightWord(idx, wIdx, cls);
+    }
+  };
+
+  utter.onend = function() {
+    setBubble(idx, false, cls);
+    // Mark all as spoken
+    var p = document.getElementById('text-' + idx);
+    if (p) {
+      var spans = p.querySelectorAll('.word');
+      for (var s = 0; s < spans.length; s++) {
+        spans[s].className = 'word spoken-' + cls;
+      }
+    }
     if (typeof onEnd === 'function') onEnd();
   };
+
   utter.onerror = function() {
-    setBubble(idx, false);
+    setBubble(idx, false, cls);
+    clearHighlights(idx);
     if (typeof onEnd === 'function') onEnd();
   };
 
   try {
     window.speechSynthesis.speak(utter);
   } catch(e) {
-    setBubble(idx, false);
+    setBubble(idx, false, cls);
   }
-
-  // Scroll into view
-  var el = document.getElementById('line-' + idx);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function playAll() {
@@ -444,7 +594,7 @@ function playAll() {
   }
 
   try { window.speechSynthesis.cancel(); } catch(e) {}
-  setTimeout(next, 100);
+  setTimeout(next, 150);
 }
 
 window.addEventListener('beforeunload', function() {
