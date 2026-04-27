@@ -9,9 +9,9 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --linda:#ff6b6b; --glynda:#4ecdc4;
-  --bg:#0d0f18; --card:#161926; --card2:#1c2033;
-  --border:#252838; --text:#eeeef5; --muted:#6b6f8a;
+  --linda:#ff6b6b;--glynda:#4ecdc4;
+  --bg:#0d0f18;--card:#161926;--card2:#1c2033;
+  --border:#252838;--text:#eeeef5;--muted:#6b6f8a;
 }
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding-bottom:80px}
 
@@ -20,7 +20,7 @@ header::after{content:'';display:block;width:56px;height:2px;background:linear-g
 header h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,5vw,2.3rem);font-weight:700;background:linear-gradient(135deg,var(--linda) 30%,var(--glynda));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 header p{color:var(--muted);font-size:.8rem;margin-top:6px}
 
-#tts-status{text-align:center;font-size:.7rem;padding:6px 16px;color:var(--muted);min-height:24px}
+#tts-status{text-align:center;font-size:.72rem;padding:6px 16px;color:var(--muted);min-height:24px}
 
 .legend{display:flex;justify-content:center;gap:20px;padding:2px 16px 20px;flex-wrap:wrap}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted)}
@@ -143,10 +143,21 @@ select option{background:#1c2033}
 </div>
 
 <script>
-// ═══════════════════════════════════════════════
-//  DATA
-//  Use SSML-friendly punctuation. No ellipses.
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// SAFETY: check TTS support immediately
+// ═══════════════════════════════════════════
+var TTS = (typeof window !== 'undefined' && 'speechSynthesis' in window)
+          ? window.speechSynthesis : null;
+
+var statusEl = document.getElementById('tts-status');
+
+if (!TTS) {
+  statusEl.textContent = '⚠️ Speech not supported on this browser.';
+}
+
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
 var LINES = [
   { speaker:'Linda',  text:'Hi Glynda, how are you?' },
   { speaker:'Glynda', text:"Hi Linda. I'm okay, just a little tired." },
@@ -160,35 +171,47 @@ var LINES = [
   { speaker:'Glynda', text:'Yes, I think I need that.' }
 ];
 
-// ═══════════════════════════════════════════════
-//  TOKENISE  – word list with char offsets
-// ═══════════════════════════════════════════════
-function tokenise(text){
-  var out=[],re=/\S+/g,m;
-  while((m=re.exec(text))!==null) out.push({text:m[0],cs:m.index});
+// ═══════════════════════════════════════════
+// TOKENISE — strip punctuation for speech,
+// keep original for display
+// ═══════════════════════════════════════════
+function tokenise(text) {
+  var out = [], re = /\S+/g, m;
+  while ((m = re.exec(text)) !== null) {
+    out.push({
+      display: m[0],               // shown in bubble
+      speak:   m[0].replace(/[^a-zA-Z0-9']/g,''), // spoken (no trailing comma/period)
+      cs:      m.index
+    });
+  }
   return out;
 }
-var LINE_DATA = LINES.map(function(l){ return {tokens:tokenise(l.text)}; });
 
-// ═══════════════════════════════════════════════
-//  BUILD DOM
-// ═══════════════════════════════════════════════
+var LINE_DATA = LINES.map(function(l) {
+  return { tokens: tokenise(l.text) };
+});
+
+// ═══════════════════════════════════════════
+// BUILD DOM
+// ═══════════════════════════════════════════
 (function(){
-  var c=document.getElementById('dialogue');
-  LINES.forEach(function(line,idx){
-    var cls=line.speaker.toLowerCase();
-    var toks=LINE_DATA[idx].tokens;
-    var raw=line.text, html='', last=0;
-    toks.forEach(function(tok,wi){
-      if(tok.cs>last) html+=raw.slice(last,tok.cs);
-      html+='<span class="word" id="w-'+idx+'-'+wi+'">'+tok.text+'</span>';
-      last=tok.cs+tok.text.length;
+  var c = document.getElementById('dialogue');
+  LINES.forEach(function(line, idx) {
+    var cls  = line.speaker.toLowerCase();
+    var toks = LINE_DATA[idx].tokens;
+    var raw  = line.text;
+    var html = '', last = 0;
+    toks.forEach(function(tok, wi) {
+      if (tok.cs > last) html += raw.slice(last, tok.cs);
+      html += '<span class="word" id="w-'+idx+'-'+wi+'">'+tok.display+'</span>';
+      last = tok.cs + tok.display.length;
     });
-    if(last<raw.length) html+=raw.slice(last);
-    var fill=cls==='linda'?'#ff6b6b':'#4ecdc4';
-    var div=document.createElement('div');
-    div.className='line '+cls; div.id='line-'+idx;
-    div.innerHTML=
+    if (last < raw.length) html += raw.slice(last);
+    var fill = cls==='linda' ? '#ff6b6b' : '#4ecdc4';
+    var div  = document.createElement('div');
+    div.className = 'line '+cls;
+    div.id = 'line-'+idx;
+    div.innerHTML =
       '<div class="avatar '+cls+'" id="av-'+idx+'">'+line.speaker[0]+'</div>'+
       '<div class="bubble" id="bub-'+idx+'">'+
         '<div class="bubble-header">'+
@@ -206,278 +229,314 @@ var LINE_DATA = LINES.map(function(l){ return {tokens:tokenise(l.text)}; });
   });
 })();
 
-// ═══════════════════════════════════════════════
-//  HIGHLIGHT HELPERS
-// ═══════════════════════════════════════════════
-function getSpans(idx){ var p=document.getElementById('txt-'+idx); return p?Array.from(p.querySelectorAll('.word')):[]; }
-function clearLine(idx){ getSpans(idx).forEach(function(s){s.className='word';}); }
-function markDone(idx,cls){ getSpans(idx).forEach(function(s){s.className='word done-'+cls;}); }
-function hlWord(li,wi,cls){
-  getSpans(li).forEach(function(s,i){
-    if(i<wi)       s.className='word done-'+cls;
-    else if(i===wi){ s.className='word hi-'+cls; bump(s); }
-    else           s.className='word';
+// ═══════════════════════════════════════════
+// HIGHLIGHT
+// ═══════════════════════════════════════════
+function getSpans(idx) {
+  var p = document.getElementById('txt-'+idx);
+  return p ? Array.from(p.querySelectorAll('.word')) : [];
+}
+function clearLine(idx)       { getSpans(idx).forEach(function(s){s.className='word';}); }
+function markDone(idx, cls)   { getSpans(idx).forEach(function(s){s.className='word done-'+cls;}); }
+function hlWord(li, wi, cls) {
+  getSpans(li).forEach(function(s, i) {
+    if      (i < wi)  s.className = 'word done-'+cls;
+    else if (i === wi){ s.className = 'word hi-'+cls; bump(s); }
+    else              s.className = 'word';
   });
 }
-function bump(el){ el.style.animationName='none'; requestAnimationFrame(function(){requestAnimationFrame(function(){el.style.animationName='';})}); }
-function setBubble(idx,on,cls){
-  var b=document.getElementById('bub-'+idx),w=document.getElementById('wv-'+idx),a=document.getElementById('av-'+idx);
-  if(b){b.classList.remove('active-linda','active-glynda');if(on)b.classList.add('active-'+cls);}
-  if(w){if(on)w.classList.add('on');else w.classList.remove('on');}
-  if(a){a.classList.remove('pulse-linda','pulse-glynda');if(on)a.classList.add('pulse-'+cls);}
+function bump(el) {
+  el.style.animationName = 'none';
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ el.style.animationName = ''; });
+  });
 }
-function resetAll(){ LINES.forEach(function(_,idx){clearLine(idx);setBubble(idx,false,LINES[idx].speaker.toLowerCase());}); }
-function charToTok(li,ci){ var t=LINE_DATA[li].tokens,b=0; for(var i=0;i<t.length;i++){if(t[i].cs<=ci)b=i;else break;} return b; }
+function setBubble(idx, on, cls) {
+  var b=document.getElementById('bub-'+idx);
+  var w=document.getElementById('wv-'+idx);
+  var a=document.getElementById('av-'+idx);
+  if(b){ b.classList.remove('active-linda','active-glynda'); if(on) b.classList.add('active-'+cls); }
+  if(w){ if(on) w.classList.add('on'); else w.classList.remove('on'); }
+  if(a){ a.classList.remove('pulse-linda','pulse-glynda'); if(on) a.classList.add('pulse-'+cls); }
+}
+function resetAll() {
+  LINES.forEach(function(_, idx){
+    clearLine(idx);
+    setBubble(idx, false, LINES[idx].speaker.toLowerCase());
+  });
+}
 
-// ═══════════════════════════════════════════════
-//  VOICES
-// ═══════════════════════════════════════════════
-var voices=[],voiceOverride={Linda:null,Glynda:null};
-var statusEl=document.getElementById('tts-status');
+// ═══════════════════════════════════════════
+// VOICES
+// ═══════════════════════════════════════════
+var voices = [], voiceOverride = { Linda:null, Glynda:null };
 
-function loadVoices(){
-  var v=window.speechSynthesis.getVoices(); if(!v||!v.length)return;
-  voices=v;
-  statusEl.textContent='✓ '+v.length+' voices ready';
-  setTimeout(function(){statusEl.textContent='';},2500);
+function safeGetVoices() {
+  try { return (TTS && TTS.getVoices()) || []; } catch(e) { return []; }
+}
+
+function loadVoices() {
+  if (!TTS) return;
+  var v = safeGetVoices();
+  if (!v.length) return;
+  voices = v;
+  statusEl.textContent = '✓ '+v.length+' voices ready';
+  setTimeout(function(){ statusEl.textContent=''; }, 2500);
   buildSelects();
 }
-function buildSelects(){
-  var en=voices.filter(function(v){return /en/i.test(v.lang);}); if(!en.length)en=voices;
-  var sL=document.getElementById('voiceLinda'),sG=document.getElementById('voiceGlynda');
-  sL.innerHTML=sG.innerHTML='<option value="">Auto</option>';
-  en.forEach(function(v){sL.add(new Option(v.name,v.name));sG.add(new Option(v.name,v.name));});
-  document.getElementById('voiceWrap').style.display=en.length>1?'flex':'none';
-}
-function pickVoice(speaker){
-  var ov=voiceOverride[speaker];
-  if(ov){var f=voices.find(function(v){return v.name===ov;});if(f)return f;}
-  if(!voices.length)voices=window.speechSynthesis.getVoices()||[];
-  var en=voices.filter(function(v){return /en/i.test(v.lang);}); if(!en.length)en=voices; if(!en.length)return null;
-  var femRe=/female|zira|samantha|victoria|fiona|karen|moira|tessa|allison|ava|kate|emma|amy|joanna|kendra|kimberly|salli|ivy|google\s+us/i;
-  var fem=en.filter(function(v){return femRe.test(v.name);});
-  if(speaker==='Linda') return fem[0]||en[0];
-  var alt=fem.filter(function(v){return v!==(fem[0]||en[0]);}); return alt[0]||fem[1]||en[1]||en[0];
+
+function buildSelects() {
+  var en = voices.filter(function(v){ return /en/i.test(v.lang); });
+  if (!en.length) en = voices;
+  var sL = document.getElementById('voiceLinda');
+  var sG = document.getElementById('voiceGlynda');
+  sL.innerHTML = sG.innerHTML = '<option value="">Auto</option>';
+  en.forEach(function(v){
+    sL.add(new Option(v.name, v.name));
+    sG.add(new Option(v.name, v.name));
+  });
+  document.getElementById('voiceWrap').style.display = en.length>1 ? 'flex' : 'none';
 }
 
-if(!window.speechSynthesis){
-  statusEl.textContent='⚠️ Speech not supported.';
-}else{
+function pickVoice(speaker) {
+  var ov = voiceOverride[speaker];
+  if (ov) { var f = voices.find(function(v){return v.name===ov;}); if(f) return f; }
+  if (!voices.length) voices = safeGetVoices();
+  var en = voices.filter(function(v){ return /en/i.test(v.lang); });
+  if (!en.length) en = voices;
+  if (!en.length) return null;
+  var femRe = /female|zira|samantha|victoria|fiona|karen|moira|tessa|allison|ava|kate|emma|amy|joanna|kendra|kimberly|salli|ivy|google\s+us/i;
+  var fem = en.filter(function(v){ return femRe.test(v.name); });
+  if (speaker==='Linda') return fem[0]||en[0];
+  var alt = fem.filter(function(v){ return v!==(fem[0]||en[0]); });
+  return alt[0]||fem[1]||en[1]||en[0];
+}
+
+if (TTS) {
   loadVoices();
-  if('onvoiceschanged' in window.speechSynthesis) window.speechSynthesis.onvoiceschanged=loadVoices;
-  var _p=setInterval(function(){if(voices.length)clearInterval(_p);else loadVoices();},300);
-  setTimeout(function(){clearInterval(_p);},6000);
+  try {
+    if ('onvoiceschanged' in TTS) TTS.onvoiceschanged = loadVoices;
+  } catch(e){}
+  var _poll = setInterval(function(){
+    if (voices.length) { clearInterval(_poll); return; }
+    loadVoices();
+  }, 250);
+  setTimeout(function(){ clearInterval(_poll); }, 8000);
 }
 
-// ═══════════════════════════════════════════════
-//  CORE ENGINE
+// ═══════════════════════════════════════════
+// ENGINE
 //
-//  APPROACH: speak the full sentence as ONE utterance
-//  (preserves natural prosody / intonation).
+// Core strategy: speak WORD BY WORD.
+// Each word = one SpeechSynthesisUtterance.
+// onend fires reliably on every platform
+// including Android WebView / Samsung Browser.
 //
-//  SYNC LAYER — three-tier cascade:
+// Natural prosody is preserved via:
+//   • speaking cleaned word text (no trailing punctuation)
+//   • inserting calibrated pauses between words
+//   • inserting longer pauses at clause/sentence boundaries
 //
-//  Tier 1 · onboundary  (Chrome desktop, Firefox, Edge)
-//    – native per-word events with exact charIndex.
-//    – Perfect sync, zero extra code needed.
-//
-//  Tier 2 · Scheduled highlights via AudioContext clock
-//    – After onstart fires we know t=0.
-//    – We pre-schedule each word's highlight using
-//      setTimeout offsets derived from the utterance
-//      text & rate, calibrated to the real voice speed
-//      measured on the previous utterance.
-//    – If onboundary fires even once, Tier 2 disables
-//      itself (Tier 1 is better).
-//
-//  Tier 3 · Pure adaptive timer
-//    – Fallback when AudioContext is unavailable.
-//    – Learns the ms-per-character ratio from onend
-//      timestamps and adjusts each line.
-//
-// ═══════════════════════════════════════════════
+// Pause lengths are scaled by speech rate so
+// rhythm feels natural at any speed setting.
+// ═══════════════════════════════════════════
 
-var isRunning=false, stopFlag=false;
-var lineQueue=[];       // list of line indexes to speak
-var kaTimer=null;
+var isRunning = false;
+var stopFlag  = false;
+var kaTimer   = null;
 
-// Calibration: ms per character at rate=1.0 (updated after each line)
-var msPer = { linda:72, glynda:72 };
+// Flat queue: each entry = one word to speak
+// { li, wi, cls, speak, isLast, pauseAfter }
+var wordQueue = [];
 
-function startKA(){ stopKA(); kaTimer=setInterval(function(){if(window.speechSynthesis.paused)window.speechSynthesis.resume();},4000); }
-function stopKA(){ if(kaTimer){clearInterval(kaTimer);kaTimer=null;} }
-function getRate(){ return parseFloat(document.getElementById('speedRange').value)||0.82; }
+function startKA() {
+  stopKA();
+  kaTimer = setInterval(function(){
+    if (TTS && TTS.paused) { try{ TTS.resume(); }catch(e){} }
+  }, 3000);
+}
+function stopKA() {
+  if (kaTimer) { clearInterval(kaTimer); kaTimer = null; }
+}
+function getRate() {
+  return parseFloat(document.getElementById('speedRange').value) || 0.82;
+}
 
-// ── Speak one line then call cb() ──────────────────────────
-function speakOneLineNow(idx, cb){
-  var cls    = LINES[idx].speaker.toLowerCase();
-  var spk    = LINES[idx].speaker;
-  var raw    = LINES[idx].text;
-  var toks   = LINE_DATA[idx].tokens;
-  var rate   = getRate();
-  var voice  = pickVoice(spk);
+// Pause after a word (ms), factoring in punctuation and rate
+function pauseAfterWord(word, isLastOfLine, rate) {
+  if (isLastOfLine)              return Math.round(700 / rate);   // between turns
+  if (/[.?!]$/.test(word))      return Math.round(320 / rate);   // sentence end
+  if (/[,;:]$/.test(word))      return Math.round(160 / rate);   // clause pause
+  return Math.round(55 / rate);                                   // normal gap
+}
 
-  // Activate bubble
-  resetAll();
-  setBubble(idx,true,cls);
-  var el=document.getElementById('line-'+idx);
-  if(el)el.scrollIntoView({behavior:'smooth',block:'center'});
-
-  // Highlight first word immediately
-  hlWord(idx,0,cls);
-
-  var utter = new SpeechSynthesisUtterance(raw);
-  if(voice) utter.voice=voice;
-  utter.lang ='en-US';
-  utter.rate  =rate;
-  utter.pitch =cls==='linda'?1.08:0.91;
-
-  // ── Tier 1: onboundary ────────────────────────────────
-  var boundaryCount=0;
-  var schedTimers=[];   // Tier-2 timers (cancelled if Tier-1 fires)
-
-  utter.onboundary=function(e){
-    if(e.name!=='word')return;
-    boundaryCount++;
-    // Cancel Tier-2 scheduled highlights once Tier-1 proves reliable
-    if(boundaryCount===1) schedTimers.forEach(clearTimeout);
-    hlWord(idx, charToTok(idx,e.charIndex), cls);
-  };
-
-  // ── Tier 2: pre-scheduled via estimated word durations ──
-  // Estimate each word's start time (ms from utterance start)
-  // using character count as a proxy for duration.
-  // We apply the calibrated msPer value and the chosen rate.
-  utter.onstart=(function(){
-    var t0=Date.now();
-    var msPerCh = msPer[cls] / rate;   // adjusted for rate
-    var cursor=0;
-    toks.forEach(function(tok,wi){
-      // Estimate start = sum of durations of preceding words + gaps
-      var delay = cursor * msPerCh;
-      // word length contributes to cursor (chars + 1 space)
-      cursor += tok.text.length + 1;
-      if(wi===0) return;  // word 0 already highlighted
-      var t=setTimeout(function(){
-        if(boundaryCount>0) return;  // Tier-1 took over
-        if(stopFlag) return;
-        hlWord(idx,wi,cls);
-      }, delay);
-      schedTimers.push(t);
+// Build flat word queue for a range of lines
+function buildWordQueue(from, to) {
+  var q = [];
+  for (var li = from; li <= to; li++) {
+    var toks = LINE_DATA[li].tokens;
+    var cls  = LINES[li].speaker.toLowerCase();
+    toks.forEach(function(tok, wi) {
+      var isLast = (wi === toks.length-1);
+      q.push({
+        li:    li,
+        wi:    wi,
+        cls:   cls,
+        speak: tok.speak || tok.display,   // cleaned text
+        raw:   tok.display,
+        isFirstOfLine: wi === 0,
+        isLastOfLine:  isLast,
+        pauseAfter: pauseAfterWord(tok.display, isLast, getRate())
+      });
     });
-    return function(){ t0=Date.now(); };
-  })();
-
-  // ── onend: calibrate + advance queue ──────────────────
-  var startTime=0;
-  utter.onstart = (function(inner){ return function(){
-    startTime=Date.now();
-    if(inner) inner();
-  }; })(utter.onstart);
-
-  utter.onend=function(){
-    schedTimers.forEach(clearTimeout);
-    if(stopFlag){doStop();return;}
-
-    // Calibrate msPer from real duration (only when no boundary events,
-    // meaning we were on Tier-2/3 — boundary events mean we don't need it)
-    if(boundaryCount===0 && startTime>0){
-      var elapsed=Date.now()-startTime;
-      var totalChars=raw.replace(/\s+/g,'').length;
-      if(totalChars>0){
-        // Smooth update (exponential moving average)
-        var measured=(elapsed/totalChars)*rate;
-        msPer[cls]=msPer[cls]*0.6 + measured*0.4;
-      }
-    }
-
-    markDone(idx,cls);
-    setBubble(idx,false,cls);
-    if(typeof cb==='function') cb();
-  };
-
-  utter.onerror=function(e){
-    schedTimers.forEach(clearTimeout);
-    console.warn('TTS:',e.error,'|',raw);
-    markDone(idx,cls);
-    setBubble(idx,false,cls);
-    if(typeof cb==='function') cb();
-  };
-
-  window.speechSynthesis.speak(utter);
+  }
+  return q;
 }
 
-// ── Queue runner ───────────────────────────────────────────
-function runQueue(){
-  if(stopFlag||!isRunning||lineQueue.length===0){
-    if(lineQueue.length===0){ isRunning=false; stopKA(); document.getElementById('stopBtn').classList.remove('visible'); }
+// ─── Speak next word in queue ───────────────
+function nextWord() {
+  if (stopFlag || !isRunning || wordQueue.length === 0) {
+    isRunning = false; stopFlag = false;
+    stopKA();
+    document.getElementById('stopBtn').classList.remove('visible');
     return;
   }
-  var idx=lineQueue.shift();
-  speakOneLineNow(idx, function(){
-    if(stopFlag){doStop();return;}
-    // Natural pause between turns
-    var gap = lineQueue.length>0 ? 680 : 0;
-    setTimeout(runQueue, gap);
-  });
+
+  var item = wordQueue.shift();
+  var li   = item.li;
+  var wi   = item.wi;
+  var cls  = item.cls;
+
+  // First word of a new line: activate bubble & scroll
+  if (item.isFirstOfLine) {
+    resetAll();
+    setBubble(li, true, cls);
+    var el = document.getElementById('line-'+li);
+    if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
+  // Highlight this word immediately (before sound starts)
+  hlWord(li, wi, cls);
+
+  // Build utterance for this single word
+  var speakText = item.speak;
+  // If word is empty after stripping (e.g. "..." alone), use a pause char
+  if (!speakText) speakText = '.';
+
+  var rate  = getRate();
+  var voice = pickVoice(LINES[li].speaker);
+  var utter = new SpeechSynthesisUtterance(speakText);
+  if (voice)   utter.voice = voice;
+  utter.lang   = 'en-US';
+  utter.rate   = rate;
+  utter.pitch  = cls==='linda' ? 1.08 : 0.91;
+  utter.volume = 1;
+
+  utter.onend = function() {
+    if (stopFlag) { doStop(); return; }
+
+    // If last word of line: mark done, close bubble
+    if (item.isLastOfLine) {
+      markDone(li, cls);
+      setBubble(li, false, cls);
+      if (typeof item._lineDone === 'function') item._lineDone();
+    }
+
+    // Pause then speak next word
+    var pause = item.pauseAfter;
+    if (pause > 0) {
+      setTimeout(nextWord, pause);
+    } else {
+      nextWord();
+    }
+  };
+
+  utter.onerror = function(e) {
+    // Skip word silently on error, keep going
+    if (stopFlag) { doStop(); return; }
+    console.warn('TTS skip:', item.raw, e.error);
+    setTimeout(nextWord, 80);
+  };
+
+  try {
+    TTS.speak(utter);
+  } catch(e) {
+    setTimeout(nextWord, 80);
+  }
 }
 
-function doStop(){
-  isRunning=false; stopFlag=false; stopKA();
-  try{window.speechSynthesis.cancel();}catch(e){}
+// ─── Stop everything ────────────────────────
+function doStop() {
+  isRunning = false; stopFlag = false;
+  stopKA();
+  wordQueue = [];
+  try { if(TTS) TTS.cancel(); } catch(e){}
   resetAll();
   document.getElementById('stopBtn').classList.remove('visible');
 }
 
-// ═══════════════════════════════════════════════
-//  PUBLIC API
-// ═══════════════════════════════════════════════
-function stopAll(){ stopFlag=true; doStop(); }
+// ═══════════════════════════════════════════
+// PUBLIC API
+// ═══════════════════════════════════════════
+function stopAll() {
+  stopFlag = true;
+  doStop();
+}
 
-function speakLine(idx,onDone,fromBtn){
-  stopFlag=true;
-  try{window.speechSynthesis.cancel();}catch(e){}
-  setTimeout(function(){
-    resetAll(); stopFlag=false; isRunning=true;
-    if(fromBtn) document.getElementById('stopBtn').classList.add('visible');
-    lineQueue=[idx];
-    if(typeof onDone==='function'){
-      // Wrap: after single line done, call onDone
-      var orig=lineQueue; // unused but keep pattern
-      speakOneLineNow(idx, function(){
-        isRunning=false; stopKA();
-        document.getElementById('stopBtn').classList.remove('visible');
-        markDone(idx,LINES[idx].speaker.toLowerCase());
-        setBubble(idx,false,LINES[idx].speaker.toLowerCase());
-        onDone();
-      });
-      lineQueue=[];
-      return;
+function speakLine(idx, onDone, fromBtn) {
+  if (!TTS) { statusEl.textContent='⚠️ Speech not supported.'; return; }
+  stopFlag = true;
+  try { TTS.cancel(); } catch(e){}
+  setTimeout(function() {
+    resetAll();
+    stopFlag  = false;
+    isRunning = true;
+    if (fromBtn) document.getElementById('stopBtn').classList.add('visible');
+
+    wordQueue = buildWordQueue(idx, idx);
+
+    // Tag last word to call onDone
+    if (typeof onDone === 'function' && wordQueue.length) {
+      wordQueue[wordQueue.length-1]._lineDone = onDone;
     }
-    startKA(); runQueue();
-  },150);
+
+    startKA();
+    nextWord();
+  }, 160);
 }
 
-function playAll(){
-  stopFlag=true;
-  try{window.speechSynthesis.cancel();}catch(e){}
-  setTimeout(function(){
-    resetAll(); stopFlag=false; isRunning=true;
+function playAll() {
+  if (!TTS) { statusEl.textContent='⚠️ Speech not supported.'; return; }
+  stopFlag = true;
+  try { TTS.cancel(); } catch(e){}
+  setTimeout(function() {
+    resetAll();
+    stopFlag  = false;
+    isRunning = true;
     document.getElementById('stopBtn').classList.add('visible');
-    lineQueue=LINES.map(function(_,i){return i;});
-    startKA(); runQueue();
-  },150);
+    wordQueue = buildWordQueue(0, LINES.length-1);
+    startKA();
+    nextWord();
+  }, 160);
 }
 
-window.addEventListener('beforeunload',function(){stopKA();try{window.speechSynthesis.cancel();}catch(e){}});
+// ═══════════════════════════════════════════
+// CLEANUP + QR
+// ═══════════════════════════════════════════
+window.addEventListener('beforeunload', function() {
+  stopKA();
+  try { if(TTS) TTS.cancel(); } catch(e){}
+});
 
-// ═══════════════════════════════════════════════
-//  QR
-// ═══════════════════════════════════════════════
-window.addEventListener('load',function(){
-  var url=window.location.href.split('?')[0];
-  try{new QRCode(document.getElementById('qrcode'),{text:url,width:160,height:160,colorDark:'#0d0f18',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});}
-  catch(e){document.getElementById('qrcode').textContent=url;}
+window.addEventListener('load', function() {
+  var url = window.location.href.split('?')[0];
+  try {
+    new QRCode(document.getElementById('qrcode'), {
+      text:url, width:160, height:160,
+      colorDark:'#0d0f18', colorLight:'#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) { document.getElementById('qrcode').textContent = url; }
 });
 </script>
 </body>
