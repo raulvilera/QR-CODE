@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Dialogue – Linda & Glinda</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --linda-color: #e07a5f;
+    --glinda-color: #81b29a;
+    --bg: #0f1117;
+    --card-bg: #1a1d27;
+    --card-border: #2a2d3a;
+    --text: #e8e8f0;
+    --muted: #7a7d9a;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  header {
+    text-align: center;
+    padding: 40px 20px 20px;
+    background: linear-gradient(180deg, #1a1d27 0%, transparent 100%);
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--linda-color), var(--glinda-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 6px;
+    font-weight: 300;
+  }
+
+  #tts-status {
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 6px 16px;
+    color: var(--muted);
+    min-height: 24px;
+  }
+
+  .play-all-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 10px 20px 28px;
+  }
+
+  .play-all-btn {
+    background: linear-gradient(135deg, var(--linda-color), #c46d55);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 36px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: opacity .2s, transform .15s;
+    box-shadow: 0 4px 20px rgba(224,122,95,.35);
+  }
+
+  .play-all-btn:hover { opacity: .88; transform: translateY(-2px); }
+  .play-all-btn:active { transform: scale(.97); }
+  .play-all-btn svg { width: 18px; height: 18px; fill: #fff; }
+
+  .dialogue {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .line {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .line.glinda { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+
+  .avatar.linda  { background: rgba(224,122,95,.22); color: var(--linda-color); border: 2px solid rgba(224,122,95,.4); }
+  .avatar.glinda { background: rgba(129,178,154,.18); color: var(--glinda-color); border: 2px solid rgba(129,178,154,.35); }
+
+  .bubble {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    max-width: calc(100% - 64px);
+    transition: border-color .2s;
+  }
+
+  .bubble.speaking {
+    border-color: var(--linda-color);
+    box-shadow: 0 0 12px rgba(224,122,95,.2);
+  }
+
+  .line.glinda .bubble.speaking {
+    border-color: var(--glinda-color);
+    box-shadow: 0 0 12px rgba(129,178,154,.2);
+  }
+
+  .bubble-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    gap: 10px;
+  }
+
+  .speaker-name {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .speaker-name.linda  { color: var(--linda-color); }
+  .speaker-name.glinda { color: var(--glinda-color); }
+
+  .play-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform .15s, opacity .2s;
+  }
+
+  .play-btn:hover { transform: scale(1.1); opacity: .85; }
+  .play-btn:active { transform: scale(.95); }
+  .play-btn svg { width: 12px; height: 12px; }
+  .play-btn.linda  { background: rgba(224,122,95,.25); }
+  .play-btn.glinda { background: rgba(129,178,154,.2); }
+
+  .bubble-text {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    font-weight: 300;
+    color: var(--text);
+  }
+
+  .qr-section {
+    max-width: 680px;
+    margin: 48px auto 0;
+    padding: 0 16px;
+    text-align: center;
+  }
+
+  .qr-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .qr-section p {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+  }
+
+  #qrcode {
+    display: inline-block;
+    background: #fff;
+    padding: 14px;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0,0,0,.5);
+  }
+
+  @keyframes wave {
+    0%, 100% { transform: scaleY(1); }
+    50%       { transform: scaleY(2.5); }
+  }
+
+  .wave-bars {
+    display: none;
+    gap: 2px;
+    align-items: center;
+    height: 14px;
+  }
+
+  .wave-bars.active { display: flex; }
+
+  .wave-bars span {
+    display: block;
+    width: 3px;
+    background: var(--linda-color);
+    border-radius: 2px;
+    height: 7px;
+    animation: wave .55s ease-in-out infinite;
+  }
+
+  .line.glinda .wave-bars span { background: var(--glinda-color); }
+  .wave-bars span:nth-child(2) { animation-delay: .12s; }
+  .wave-bars span:nth-child(3) { animation-delay: .24s; }
+  .wave-bars span:nth-child(4) { animation-delay: .36s; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Linda &amp; Glinda</h1>
+  <p>English Dialogue · Tap ▶ to hear each line</p>
+</header>
+
+<div id="tts-status">⏳ Loading voices…</div>
+
+<div class="play-all-wrap">
+  <button class="play-all-btn" onclick="playAll()">
+    <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    Play Full Dialogue
+  </button>
+</div>
+
+<div class="dialogue" id="dialogue"></div>
+
+<div class="qr-section">
+  <h2>📱 Share this Dialogue</h2>
+  <p>Scan the QR Code to open on any device</p>
+  <div id="qrcode"></div>
+</div>
+
+<script>
+// ── Dialogue data ──────────────────────────────────────────────
+var lines = [
+  { speaker: "Linda",  text: "Hi, Glinda. How are you?" },
+  { speaker: "Glinda", text: "Hi, Linda. I'm okay… just a little tired." },
+  { speaker: "Linda",  text: "I understand. I love my job, but my days are busy." },
+  { speaker: "Glinda", text: "I have a good job. I make a lot of money, but I'm not happy." },
+  { speaker: "Linda",  text: "Really? Why not?" },
+  { speaker: "Glinda", text: "I work a lot. I don't have much time for my son." },
+  { speaker: "Linda",  text: "I see… I have three children, and I spend a lot of time with them." },
+  { speaker: "Glinda", text: "That is very good. I have one son, and I want to spend more time with him." },
+  { speaker: "Linda",  text: "Maybe you can start with small changes." },
+  { speaker: "Glinda", text: "Yes… I think I need that." }
+];
+
+// ── Build DOM ──────────────────────────────────────────────────
+var container = document.getElementById('dialogue');
+
+for (var i = 0; i < lines.length; i++) {
+  (function(idx) {
+    var line = lines[idx];
+    var cls  = line.speaker.toLowerCase();
+    var init = line.speaker[0];
+
+    var div = document.createElement('div');
+    div.className = 'line ' + cls;
+    div.id = 'line-' + idx;
+
+    div.innerHTML =
+      '<div class="avatar ' + cls + '">' + init + '</div>' +
+      '<div class="bubble" id="bubble-' + idx + '">' +
+        '<div class="bubble-header">' +
+          '<span class="speaker-name ' + cls + '">' + line.speaker.toUpperCase() + '</span>' +
+          '<div class="wave-bars" id="wave-' + idx + '">' +
+            '<span></span><span></span><span></span><span></span>' +
+          '</div>' +
+          '<button class="play-btn ' + cls + '" onclick="speakLine(' + idx + ')" title="Play">' +
+            '<svg viewBox="0 0 24 24" fill="' + (cls === 'linda' ? '#e07a5f' : '#81b29a') + '">' +
+              '<path d="M8 5v14l11-7z"/>' +
+            '</svg>' +
+          '</button>' +
+        '</div>' +
+        '<p class="bubble-text">' + line.text + '</p>' +
+      '</div>';
+
+    container.appendChild(div);
+  })(i);
+}
+
+// ── Speech Synthesis — SAFE INIT ───────────────────────────────
+var voices   = [];
+var isPlayingAll = false;
+var playIdx  = 0;
+var statusEl = document.getElementById('tts-status');
+
+function loadVoices() {
+  try {
+    var v = window.speechSynthesis.getVoices();
+    if (v && v.length > 0) {
+      voices = v;
+      statusEl.textContent = '✓ ' + v.length + ' voices ready';
+      setTimeout(function() { statusEl.textContent = ''; }, 3000);
+    }
+  } catch(e) {}
+}
+
+if (!window.speechSynthesis) {
+  statusEl.textContent = '⚠️ Speech not supported on this browser.';
+} else {
+  // Initial attempt
+  loadVoices();
+
+  // Safe event binding — avoid crash if property doesn't exist
+  try {
+    if ('onvoiceschanged' in window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+  } catch(e) {}
+
+  // Polling fallback (needed on Android/some mobile browsers)
+  var pollCount = 0;
+  var pollTimer = setInterval(function() {
+    loadVoices();
+    if (voices.length > 0 || pollCount++ > 15) {
+      clearInterval(pollTimer);
+    }
+  }, 300);
+}
+
+function pickVoice(speaker) {
+  if (!voices.length) {
+    try { voices = window.speechSynthesis.getVoices() || []; } catch(e) {}
+  }
+
+  var enVoices = voices.filter(function(v) { return /en/i.test(v.lang); });
+  if (!enVoices.length) enVoices = voices;
+  if (!enVoices.length) return null;
+
+  var femaleNames = /female|zira|samantha|victoria|fiona|karen|moira|tessa|allison|ava|susan|kate|emma|amy|joanna|kendra|kimberly|salli|ivy/i;
+  var females = enVoices.filter(function(v) { return femaleNames.test(v.name); });
+
+  if (speaker === 'Linda') {
+    return females[0] || enVoices[0];
+  } else {
+    // Glinda gets a different voice
+    return females[1] || females[0] || enVoices[1] || enVoices[0];
+  }
+}
+
+function setBubble(idx, active) {
+  var b = document.getElementById('bubble-' + idx);
+  var w = document.getElementById('wave-' + idx);
+  if (b) {
+    if (active) b.classList.add('speaking');
+    else b.classList.remove('speaking');
+  }
+  if (w) {
+    if (active) w.classList.add('active');
+    else w.classList.remove('active');
+  }
+}
+
+function speakLine(idx, onEnd) {
+  if (!window.speechSynthesis) {
+    alert('Speech not supported on this browser.');
+    return;
+  }
+
+  try { window.speechSynthesis.cancel(); } catch(e) {}
+
+  // Clear all bubbles
+  for (var j = 0; j < lines.length; j++) setBubble(j, false);
+
+  var line  = lines[idx];
+  var utter = new SpeechSynthesisUtterance(line.text);
+  var v     = pickVoice(line.speaker);
+
+  if (v) utter.voice = v;
+  utter.lang  = 'en-US';
+  utter.rate  = 0.88;
+  utter.pitch = (line.speaker === 'Linda') ? 1.15 : 0.92;
+
+  utter.onstart = function() { setBubble(idx, true); };
+  utter.onend   = function() {
+    setBubble(idx, false);
+    if (typeof onEnd === 'function') onEnd();
+  };
+  utter.onerror = function() {
+    setBubble(idx, false);
+    if (typeof onEnd === 'function') onEnd();
+  };
+
+  try {
+    window.speechSynthesis.speak(utter);
+  } catch(e) {
+    setBubble(idx, false);
+  }
+
+  // Scroll into view
+  var el = document.getElementById('line-' + idx);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function playAll() {
+  if (!window.speechSynthesis) {
+    alert('Speech not supported on this browser.');
+    return;
+  }
+
+  isPlayingAll = true;
+  playIdx = 0;
+
+  function next() {
+    if (!isPlayingAll || playIdx >= lines.length) {
+      isPlayingAll = false;
+      return;
+    }
+    speakLine(playIdx++, next);
+  }
+
+  try { window.speechSynthesis.cancel(); } catch(e) {}
+  setTimeout(next, 100);
+}
+
+window.addEventListener('beforeunload', function() {
+  try { window.speechSynthesis.cancel(); } catch(e) {}
+});
+
+// ── QR Code ────────────────────────────────────────────────────
+window.addEventListener('load', function() {
+  var url = window.location.href.split('?')[0];
+  try {
+    new QRCode(document.getElementById('qrcode'), {
+      text: url,
+      width: 180,
+      height: 180,
+      colorDark: '#0f1117',
+      colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) {
+    document.getElementById('qrcode').textContent = url;
+  }
+});
+</script>
+</body>
+</html>
