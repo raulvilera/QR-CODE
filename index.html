@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>English Dialogue – Linda & Glinda</title>
+<title>English Dialogue – Linda & Glynda</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
@@ -11,7 +11,7 @@
 
   :root {
     --linda:  #ff6b6b;
-    --glinda: #4ecdc4;
+    --glynda: #4ecdc4;
     --bg:     #0d0f18;
     --card:   #161926;
     --border: #252838;
@@ -37,7 +37,7 @@
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--linda), var(--glinda));
+    background: linear-gradient(135deg, var(--linda), var(--glynda));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -63,7 +63,7 @@
     width: 28px; height: 10px; border-radius: 5px;
   }
   .swatch.linda  { background: linear-gradient(90deg, #ff6b6b, #ffa500); }
-  .swatch.glinda { background: linear-gradient(90deg, #4ecdc4, #45b7d1); }
+  .swatch.glynda { background: linear-gradient(90deg, #4ecdc4, #45b7d1); }
 
   /* ── PLAY ALL ── */
   .play-all-wrap { display: flex; justify-content: center; padding: 0 20px 28px; }
@@ -87,7 +87,7 @@
   }
 
   .line { display: flex; align-items: flex-start; gap: 10px; }
-  .line.glinda { flex-direction: row-reverse; }
+  .line.glynda { flex-direction: row-reverse; }
 
   .avatar {
     width: 40px; height: 40px; border-radius: 50%;
@@ -96,7 +96,7 @@
     flex-shrink: 0; margin-top: 4px;
   }
   .avatar.linda  { background: rgba(255,107,107,.18); color: var(--linda);  border: 2px solid rgba(255,107,107,.4); }
-  .avatar.glinda { background: rgba(78,205,196,.15);  color: var(--glinda); border: 2px solid rgba(78,205,196,.35); }
+  .avatar.glynda { background: rgba(78,205,196,.15);  color: var(--glynda); border: 2px solid rgba(78,205,196,.35); }
 
   .bubble {
     background: var(--card); border: 1.5px solid var(--border);
@@ -105,7 +105,7 @@
     transition: border-color .25s, box-shadow .25s;
   }
   .bubble.active-linda  { border-color: var(--linda);  box-shadow: 0 0 18px rgba(255,107,107,.3); }
-  .bubble.active-glinda { border-color: var(--glinda); box-shadow: 0 0 18px rgba(78,205,196,.28); }
+  .bubble.active-glynda { border-color: var(--glynda); box-shadow: 0 0 18px rgba(78,205,196,.28); }
 
   .bubble-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -113,7 +113,7 @@
   }
   .speaker-name { font-size: 0.68rem; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; }
   .speaker-name.linda  { color: var(--linda); }
-  .speaker-name.glinda { color: var(--glinda); }
+  .speaker-name.glynda { color: var(--glynda); }
 
   .play-btn {
     width: 28px; height: 28px; border-radius: 50%; border: none;
@@ -124,7 +124,7 @@
   .play-btn:active { transform: scale(.94); }
   .play-btn svg { width: 11px; height: 11px; }
   .play-btn.linda  { background: rgba(255,107,107,.22); }
-  .play-btn.glinda { background: rgba(78,205,196,.18); }
+  .play-btn.glynda { background: rgba(78,205,196,.18); }
 
   /* ── WORD SPANS ── */
   .bubble-text {
@@ -156,7 +156,7 @@
   }
 
   /* ── GLINDA: electric cyan-teal ── */
-  .word.hi-glinda {
+  .word.hi-glynda {
     display: inline-block;
     background: linear-gradient(135deg, rgba(78,205,196,.3), rgba(69,183,209,.3));
     color: #a0fff7 !important;
@@ -169,7 +169,7 @@
 
   /* already-said: soft tint */
   .word.done-linda  { color: rgba(255,150,100,.65); }
-  .word.done-glinda { color: rgba(78,205,196,.6); }
+  .word.done-glynda { color: rgba(78,205,196,.6); }
 
   /* ── WAVE BARS ── */
   @keyframes wave {
@@ -183,7 +183,7 @@
     animation: wave .5s ease-in-out infinite;
   }
   .line.linda  .wave-bars span { background: var(--linda); }
-  .line.glinda .wave-bars span { background: var(--glinda); }
+  .line.glynda .wave-bars span { background: var(--glynda); }
   .wave-bars span:nth-child(2) { animation-delay: .1s; }
   .wave-bars span:nth-child(3) { animation-delay: .2s; }
   .wave-bars span:nth-child(4) { animation-delay: .3s; }
@@ -202,7 +202,7 @@
 <body>
 
 <header>
-  <h1>Linda &amp; Glinda</h1>
+  <h1>Linda &amp; Glynda</h1>
   <p>English Dialogue · Each word glows as it's spoken</p>
 </header>
 
@@ -214,8 +214,8 @@
     <span>Linda — fiery orange</span>
   </div>
   <div class="legend-item">
-    <div class="swatch glinda"></div>
-    <span>Glinda — electric cyan</span>
+    <div class="swatch glynda"></div>
+    <span>Glynda — electric cyan</span>
   </div>
 </div>
 
@@ -237,16 +237,16 @@
 <script>
 // ── Data ──────────────────────────────────────────────────────
 var lines = [
-  { speaker: "Linda",  text: "Hi, Glinda. How are you?" },
-  { speaker: "Glinda", text: "Hi, Linda. I'm okay… just a little tired." },
+  { speaker: "Linda",  text: "Hi, Glynda. How are you?" },
+  { speaker: "Glynda", text: "Hi, Linda. I'm okay… just a little tired." },
   { speaker: "Linda",  text: "I understand. I love my job, but my days are busy." },
-  { speaker: "Glinda", text: "I have a good job. I make a lot of money, but I'm not happy." },
+  { speaker: "Glynda", text: "I have a good job. I make a lot of money, but I'm not happy." },
   { speaker: "Linda",  text: "Really? Why not?" },
-  { speaker: "Glinda", text: "I work a lot. I don't have much time for my son." },
+  { speaker: "Glynda", text: "I work a lot. I don't have much time for my son." },
   { speaker: "Linda",  text: "I see… I have three children, and I spend a lot of time with them." },
-  { speaker: "Glinda", text: "That is very good. I have one son, and I want to spend more time with him." },
+  { speaker: "Glynda", text: "That is very good. I have one son, and I want to spend more time with him." },
   { speaker: "Linda",  text: "Maybe you can start with small changes." },
-  { speaker: "Glinda", text: "Yes… I think I need that." }
+  { speaker: "Glynda", text: "Yes… I think I need that." }
 ];
 
 // ── Pre-compute word lists & char offsets ─────────────────────
@@ -344,7 +344,7 @@ function setBubble(idx, active, cls) {
   var b = document.getElementById('bubble-' + idx);
   var w = document.getElementById('wave-' + idx);
   if (b) {
-    b.classList.remove('active-linda','active-glinda');
+    b.classList.remove('active-linda','active-glynda');
     if (active) b.classList.add('active-' + cls);
   }
   if (w) { if (active) w.classList.add('on'); else w.classList.remove('on'); }
