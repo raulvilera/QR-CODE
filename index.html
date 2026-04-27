@@ -9,171 +9,104 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --L:#e8614a; --L2:#f5a05a;
-  --G:#2ec4b6; --G2:#48a9e6;
-  --bg:#080c14; --card:#111827; --card2:#0f1c2e;
-  --border:#1a2740; --text:#dce8f8; --muted:#3d5478;
+  --L:#e8614a;--L2:#f5a05a;
+  --G:#2ec4b6;--G2:#48a9e6;
+  --bg:#080c14;--card:#111827;--card2:#0f1c2e;
+  --border:#1a2740;--text:#dce8f8;--muted:#3d5478;
 }
 html{scroll-behavior:smooth}
-body{
-  background:var(--bg); color:var(--text);
-  font-family:'Outfit',sans-serif;
-  min-height:100vh; padding-bottom:90px;
-  overflow-x:hidden;
-}
-body::before{
-  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
-  background:
-    radial-gradient(ellipse 55% 45% at 10% 15%, rgba(232,97,74,.07) 0%, transparent 65%),
-    radial-gradient(ellipse 50% 55% at 90% 80%, rgba(46,196,182,.06) 0%, transparent 65%);
-}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;min-height:100vh;padding-bottom:90px;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 55% 45% at 10% 15%,rgba(232,97,74,.07) 0%,transparent 65%),
+             radial-gradient(ellipse 50% 55% at 90% 80%,rgba(46,196,182,.06) 0%,transparent 65%)}
 
-/* ── HEADER ── */
-header{ position:relative; z-index:1; text-align:center; padding:44px 20px 6px; }
-header h1{
-  font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:600;
-  font-size:clamp(2rem,6vw,2.8rem); letter-spacing:-.5px;
+header{position:relative;z-index:1;text-align:center;padding:44px 20px 6px}
+header h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(2rem,6vw,2.8rem);letter-spacing:-.5px;
   background:linear-gradient(120deg,var(--L) 20%,var(--L2) 48%,var(--G) 80%);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-header p{ color:var(--muted); font-size:.76rem; margin-top:5px; letter-spacing:.4px; }
-header::after{
-  content:''; display:block; width:44px; height:1.5px; border-radius:1px;
-  background:linear-gradient(90deg,var(--L),var(--G)); margin:16px auto 0;
-}
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+header p{color:var(--muted);font-size:.76rem;margin-top:5px;letter-spacing:.4px}
+header::after{content:'';display:block;width:44px;height:1.5px;border-radius:1px;
+  background:linear-gradient(90deg,var(--L),var(--G));margin:16px auto 0}
 
-/* ── STATUS ── */
-#sts{ position:relative; z-index:1; text-align:center; font-size:.7rem; min-height:22px; padding:4px 16px; color:var(--muted); }
+#sts{position:relative;z-index:1;text-align:center;font-size:.7rem;min-height:22px;padding:4px 16px;color:var(--muted)}
 
-/* ── CONTROLS ── */
-.ctrl{ position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:10px; justify-content:center; padding:10px 16px 26px; }
+.ctrl{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:10px 16px 26px}
+.btn-play{background:linear-gradient(135deg,var(--L),var(--L2));color:#fff;border:none;border-radius:50px;padding:12px 30px;
+  font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;
+  box-shadow:0 4px 20px rgba(232,97,74,.36);transition:transform .15s,box-shadow .2s,opacity .2s}
+.btn-play:hover{transform:translateY(-2px);box-shadow:0 6px 26px rgba(232,97,74,.52)}
+.btn-play:active{transform:scale(.97)}
+.btn-play svg{width:14px;height:14px;fill:#fff}
+.btn-stop{background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border);border-radius:50px;padding:11px 22px;
+  font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;display:none;align-items:center;gap:7px;transition:background .2s}
+.btn-stop.on{display:flex}
+.btn-stop:hover{background:rgba(255,255,255,.09)}
+.pill{display:flex;align-items:center;gap:8px;background:var(--card2);border:1px solid var(--border);border-radius:50px;padding:8px 16px}
+.pill label{font-size:.68rem;color:var(--muted);white-space:nowrap}
+input[type=range]{-webkit-appearance:none;appearance:none;width:76px;height:3px;background:var(--border);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:13px;height:13px;border-radius:50%;
+  background:linear-gradient(135deg,var(--L),var(--G));cursor:pointer}
+#spv{font-size:.68rem;color:var(--text);min-width:28px;text-align:right}
 
-.btn-play{
-  background:linear-gradient(135deg,var(--L),var(--L2));
-  color:#fff; border:none; border-radius:50px; padding:12px 30px;
-  font-family:'Outfit',sans-serif; font-size:.9rem; font-weight:600;
-  cursor:pointer; display:flex; align-items:center; gap:8px;
-  box-shadow:0 4px 20px rgba(232,97,74,.36);
-  transition:transform .15s, box-shadow .2s, opacity .2s;
-}
-.btn-play:hover{ transform:translateY(-2px); box-shadow:0 6px 26px rgba(232,97,74,.52); }
-.btn-play:active{ transform:scale(.97); }
-.btn-play svg{ width:14px; height:14px; fill:#fff; }
+.legend{position:relative;z-index:1;display:flex;justify-content:center;gap:22px;flex-wrap:wrap;padding:0 16px 22px}
+.leg{display:flex;align-items:center;gap:7px;font-size:.7rem;color:var(--muted)}
+.sw{width:20px;height:7px;border-radius:3px}
+.sw.L{background:linear-gradient(90deg,var(--L),var(--L2))}
+.sw.G{background:linear-gradient(90deg,var(--G),var(--G2))}
 
-.btn-stop{
-  background:rgba(255,255,255,.05); color:var(--muted);
-  border:1px solid var(--border); border-radius:50px; padding:11px 22px;
-  font-family:'Outfit',sans-serif; font-size:.9rem; font-weight:500;
-  cursor:pointer; display:none; align-items:center; gap:7px;
-  transition:background .2s;
-}
-.btn-stop.on{ display:flex; }
-.btn-stop:hover{ background:rgba(255,255,255,.09); }
+.dlg{position:relative;z-index:1;display:flex;flex-direction:column;gap:13px;max-width:680px;margin:0 auto;padding:0 14px}
+.row{display:flex;align-items:flex-start;gap:9px}
+.row.G{flex-direction:row-reverse}
+.av{width:38px;height:38px;border-radius:50%;flex-shrink:0;margin-top:5px;display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:600;font-style:italic;transition:box-shadow .3s}
+.row.L .av{background:rgba(232,97,74,.12);color:var(--L);border:1.5px solid rgba(232,97,74,.28)}
+.row.G .av{background:rgba(46,196,182,.1);color:var(--G);border:1.5px solid rgba(46,196,182,.25)}
+.row.L.speaking .av{box-shadow:0 0 0 3px rgba(232,97,74,.3)}
+.row.G.speaking .av{box-shadow:0 0 0 3px rgba(46,196,182,.28)}
+.bub{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:10px 13px;max-width:calc(100% - 52px);
+  transition:border-color .3s,box-shadow .3s,background .3s}
+.row.L.speaking .bub{border-color:rgba(232,97,74,.5);box-shadow:0 0 18px rgba(232,97,74,.13);background:#160f10}
+.row.G.speaking .bub{border-color:rgba(46,196,182,.45);box-shadow:0 0 18px rgba(46,196,182,.1);background:#0d1a1c}
+.bh{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.sn{font-size:.62rem;font-weight:600;letter-spacing:1.8px;text-transform:uppercase}
+.row.L .sn{color:var(--L)}
+.row.G .sn{color:var(--G)}
+.hr{display:flex;align-items:center;gap:6px}
 
-.pill{
-  display:flex; align-items:center; gap:8px;
-  background:var(--card2); border:1px solid var(--border);
-  border-radius:50px; padding:8px 16px;
-}
-.pill label{ font-size:.68rem; color:var(--muted); white-space:nowrap; }
-input[type=range]{
-  -webkit-appearance:none; appearance:none;
-  width:76px; height:3px; background:var(--border);
-  border-radius:2px; outline:none; cursor:pointer;
-}
-input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none; appearance:none;
-  width:13px; height:13px; border-radius:50%;
-  background:linear-gradient(135deg,var(--L),var(--G)); cursor:pointer;
-}
-#spv{ font-size:.68rem; color:var(--text); min-width:28px; text-align:right; }
+@keyframes wb{0%,100%{transform:scaleY(1)}50%{transform:scaleY(2.8)}}
+.wv{display:none;gap:2px;align-items:center;height:12px}
+.wv.on{display:flex}
+.wv span{display:block;width:2px;height:5px;border-radius:2px;animation:wb .42s ease-in-out infinite}
+.row.L .wv span{background:var(--L)}
+.row.G .wv span{background:var(--G)}
+.wv span:nth-child(2){animation-delay:.08s}
+.wv span:nth-child(3){animation-delay:.16s}
+.wv span:nth-child(4){animation-delay:.24s}
 
-/* ── LEGEND ── */
-.legend{ position:relative; z-index:1; display:flex; justify-content:center; gap:22px; flex-wrap:wrap; padding:0 16px 22px; }
-.leg{ display:flex; align-items:center; gap:7px; font-size:.7rem; color:var(--muted); }
-.sw{ width:20px; height:7px; border-radius:3px; }
-.sw.L{ background:linear-gradient(90deg,var(--L),var(--L2)); }
-.sw.G{ background:linear-gradient(90deg,var(--G),var(--G2)); }
+.lbtn{width:25px;height:25px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:transform .15s,opacity .2s}
+.lbtn:hover{transform:scale(1.13);opacity:.85}
+.lbtn svg{width:9px;height:9px}
+.row.L .lbtn{background:rgba(232,97,74,.2)}
+.row.G .lbtn{background:rgba(46,196,182,.18)}
 
-/* ── DIALOGUE ── */
-.dlg{ position:relative; z-index:1; display:flex; flex-direction:column; gap:13px; max-width:680px; margin:0 auto; padding:0 14px; }
-.row{ display:flex; align-items:flex-start; gap:9px; }
-.row.G{ flex-direction:row-reverse; }
+.txt{font-size:.94rem;line-height:1.82;font-weight:300;color:var(--text)}
+.w{display:inline;border-radius:5px;padding:1px 2px;transition:color .06s}
+@keyframes wp{0%{transform:scale(1)}38%{transform:scale(1.16)}100%{transform:scale(1)}}
+.w.hl{display:inline-block;animation:wp .21s cubic-bezier(.34,1.56,.64,1)}
+.row.L .w.hl{background:linear-gradient(135deg,rgba(232,97,74,.28),rgba(245,160,90,.22));color:#ffd0a5!important;font-weight:500;
+  text-shadow:0 0 14px rgba(232,97,74,.55);outline:1px solid rgba(232,97,74,.32);border-radius:6px}
+.row.G .w.hl{background:linear-gradient(135deg,rgba(46,196,182,.25),rgba(72,169,230,.2));color:#a6f5ef!important;font-weight:500;
+  text-shadow:0 0 14px rgba(46,196,182,.65);outline:1px solid rgba(46,196,182,.35);border-radius:6px}
+.w.done{opacity:.42}
 
-/* Avatar */
-.av{
-  width:38px; height:38px; border-radius:50%; flex-shrink:0; margin-top:5px;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Cormorant Garamond',serif; font-size:.95rem; font-weight:600; font-style:italic;
-  transition:box-shadow .3s;
-}
-.row.L .av{ background:rgba(232,97,74,.12); color:var(--L); border:1.5px solid rgba(232,97,74,.28); }
-.row.G .av{ background:rgba(46,196,182,.1);  color:var(--G); border:1.5px solid rgba(46,196,182,.25); }
-.row.L.speaking .av{ box-shadow:0 0 0 3px rgba(232,97,74,.3); }
-.row.G.speaking .av{ box-shadow:0 0 0 3px rgba(46,196,182,.28); }
+.qr-wrap{position:relative;z-index:1;max-width:680px;margin:56px auto 0;padding:0 16px;text-align:center}
+.qr-wrap h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;margin-bottom:4px}
+.qr-wrap p{color:var(--muted);font-size:.74rem;margin-bottom:16px}
+#qr{display:inline-block;background:#fff;padding:12px;border-radius:14px;box-shadow:0 6px 32px rgba(0,0,0,.55)}
 
-/* Bubble */
-.bub{
-  background:var(--card); border:1px solid var(--border); border-radius:18px;
-  padding:10px 13px; max-width:calc(100% - 52px);
-  transition:border-color .3s, box-shadow .3s, background .3s;
-}
-.row.L.speaking .bub{ border-color:rgba(232,97,74,.5); box-shadow:0 0 18px rgba(232,97,74,.13); background:#160f10; }
-.row.G.speaking .bub{ border-color:rgba(46,196,182,.45); box-shadow:0 0 18px rgba(46,196,182,.1);  background:#0d1a1c; }
-
-.bh{ display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
-.sn{ font-size:.62rem; font-weight:600; letter-spacing:1.8px; text-transform:uppercase; }
-.row.L .sn{ color:var(--L); }
-.row.G .sn{ color:var(--G); }
-.hr{ display:flex; align-items:center; gap:6px; }
-
-/* Wave bars */
-@keyframes wb{ 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(2.8)} }
-.wv{ display:none; gap:2px; align-items:center; height:12px; }
-.wv.on{ display:flex; }
-.wv span{ display:block; width:2px; height:5px; border-radius:2px; animation:wb .42s ease-in-out infinite; }
-.row.L .wv span{ background:var(--L); }
-.row.G .wv span{ background:var(--G); }
-.wv span:nth-child(2){ animation-delay:.08s; }
-.wv span:nth-child(3){ animation-delay:.16s; }
-.wv span:nth-child(4){ animation-delay:.24s; }
-
-/* Line play btn */
-.lbtn{
-  width:25px; height:25px; border-radius:50%; border:none; cursor:pointer;
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  transition:transform .15s, opacity .2s;
-}
-.lbtn:hover{ transform:scale(1.13); opacity:.85; }
-.lbtn svg{ width:9px; height:9px; }
-.row.L .lbtn{ background:rgba(232,97,74,.2); }
-.row.G .lbtn{ background:rgba(46,196,182,.18); }
-
-/* Words */
-.txt{ font-size:.94rem; line-height:1.82; font-weight:300; color:var(--text); }
-.w{ display:inline; border-radius:5px; padding:1px 2px; transition:color .06s; }
-
-@keyframes wp{ 0%{transform:scale(1)} 38%{transform:scale(1.16)} 100%{transform:scale(1)} }
-.w.hl{ display:inline-block; animation:wp .21s cubic-bezier(.34,1.56,.64,1); }
-.row.L .w.hl{
-  background:linear-gradient(135deg,rgba(232,97,74,.28),rgba(245,160,90,.22));
-  color:#ffd0a5 !important; font-weight:500;
-  text-shadow:0 0 14px rgba(232,97,74,.55);
-  outline:1px solid rgba(232,97,74,.32); border-radius:6px;
-}
-.row.G .w.hl{
-  background:linear-gradient(135deg,rgba(46,196,182,.25),rgba(72,169,230,.2));
-  color:#a6f5ef !important; font-weight:500;
-  text-shadow:0 0 14px rgba(46,196,182,.65);
-  outline:1px solid rgba(46,196,182,.35); border-radius:6px;
-}
-.w.done{ opacity:.45; }
-
-/* ── QR ── */
-.qr-wrap{ position:relative; z-index:1; max-width:680px; margin:56px auto 0; padding:0 16px; text-align:center; }
-.qr-wrap h2{ font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.2rem; margin-bottom:4px; }
-.qr-wrap p{ color:var(--muted); font-size:.74rem; margin-bottom:16px; }
-#qr{ display:inline-block; background:#fff; padding:12px; border-radius:14px; box-shadow:0 6px 32px rgba(0,0,0,.55); }
+/* Voice debug info */
+#voiceInfo{position:relative;z-index:1;text-align:center;font-size:.65rem;color:var(--muted);padding:0 16px 4px;opacity:.7}
 </style>
 </head>
 <body>
@@ -183,6 +116,7 @@ input[type=range]::-webkit-slider-thumb{
   <p>English Dialogue · Words glow in sync with speech</p>
 </header>
 <div id="sts">⏳ Loading voices…</div>
+<div id="voiceInfo"></div>
 
 <div class="legend">
   <div class="leg"><div class="sw L"></div><span>Linda — warm &amp; expressive</span></div>
@@ -197,7 +131,7 @@ input[type=range]::-webkit-slider-thumb{
   <button class="btn-stop" id="btnStop" onclick="stopAll()">■ Stop</button>
   <div class="pill">
     <label for="spRange">Speed</label>
-    <input type="range" id="spRange" min="0.55" max="1.15" step="0.05" value="0.78"
+    <input type="range" id="spRange" min="0.55" max="1.0" step="0.05" value="0.78"
            oninput="document.getElementById('spv').textContent=parseFloat(this.value).toFixed(2)+'×'">
     <span id="spv">0.78×</span>
   </div>
@@ -212,57 +146,45 @@ input[type=range]::-webkit-slider-thumb{
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════
-//  DIALOGUE DATA
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
 var LINES = [
-  { id:0, s:'L', name:'Linda',
-    text:'Hi Glynda! How are you doing today?' },
-  { id:1, s:'G', name:'Glynda',
-    text:"Hi Linda. I'm okay, just a little tired." },
-  { id:2, s:'L', name:'Linda',
-    text:"I understand. I love my job, but my days are very busy." },
-  { id:3, s:'G', name:'Glynda',
-    text:"I have a good job and I make a lot of money, but I'm not happy." },
-  { id:4, s:'L', name:'Linda',
-    text:'Really? Why not?' },
-  { id:5, s:'G', name:'Glynda',
-    text:"I work so much. I don't have enough time for my son." },
-  { id:6, s:'L', name:'Linda',
-    text:'I see. I have three children, and I really try to spend a lot of time with them.' },
-  { id:7, s:'G', name:'Glynda',
-    text:'That is wonderful. I have one son, and I want to spend so much more time with him.' },
-  { id:8, s:'L', name:'Linda',
-    text:'Maybe you can start with small changes. It really helps.' },
-  { id:9, s:'G', name:'Glynda',
-    text:"Yes, I think you're right. I really need that." }
+  {id:0,s:'L',name:'Linda',  text:'Hi Glynda! How are you doing today?'},
+  {id:1,s:'G',name:'Glynda', text:"Hi Linda. I'm okay, just a little tired."},
+  {id:2,s:'L',name:'Linda',  text:"I understand. I love my job, but my days are very busy."},
+  {id:3,s:'G',name:'Glynda', text:"I have a good job and I make a lot of money, but I'm not happy."},
+  {id:4,s:'L',name:'Linda',  text:'Really? Why not?'},
+  {id:5,s:'G',name:'Glynda', text:"I work so much. I don't have enough time for my son."},
+  {id:6,s:'L',name:'Linda',  text:'I see. I have three children, and I really try to spend a lot of time with them.'},
+  {id:7,s:'G',name:'Glynda', text:'That is wonderful. I have one son, and I want to spend so much more time with him.'},
+  {id:8,s:'L',name:'Linda',  text:'Maybe you can start with small changes. It really helps.'},
+  {id:9,s:'G',name:'Glynda', text:"Yes, I think you're right. I really need that."}
 ];
 
-// ══════════════════════════════════════════════════════
-//  TOKENISE
-// ══════════════════════════════════════════════════════
-function tokenise(text){
-  var out=[], re=/\S+/g, m;
-  while((m=re.exec(text))!==null) out.push({t:m[0], cs:m.index});
+// ══════════════════════════════════════════════════
+// TOKENISE
+// ══════════════════════════════════════════════════
+function tokenise(txt){
+  var out=[],re=/\S+/g,m;
+  while((m=re.exec(txt))!==null) out.push({t:m[0],cs:m.index});
   return out;
 }
-var LINE_DATA = LINES.map(function(l){ return {toks:tokenise(l.text)}; });
+var LD = LINES.map(function(l){ return {toks:tokenise(l.text)}; });
 
-// ══════════════════════════════════════════════════════
-//  BUILD DOM
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// BUILD DOM
+// ══════════════════════════════════════════════════
 (function(){
   var c=document.getElementById('dlg');
   LINES.forEach(function(line){
-    var toks=LINE_DATA[line.id].toks, raw=line.text;
-    var html='', last=0;
+    var toks=LD[line.id].toks, raw=line.text, html='', last=0;
     toks.forEach(function(tok,wi){
       if(tok.cs>last) html+=raw.slice(last,tok.cs);
       html+='<span class="w" id="w-'+line.id+'-'+wi+'">'+tok.t+'</span>';
       last=tok.cs+tok.t.length;
     });
     if(last<raw.length) html+=raw.slice(last);
-
     var fill=line.s==='L'?'#e8614a':'#2ec4b6';
     var div=document.createElement('div');
     div.className='row '+line.s; div.id='row-'+line.id;
@@ -272,10 +194,8 @@ var LINE_DATA = LINES.map(function(l){ return {toks:tokenise(l.text)}; });
         '<div class="bh">'+
           '<span class="sn">'+line.name+'</span>'+
           '<div class="hr">'+
-            '<div class="wv" id="wv-'+line.id+'">'+
-              '<span></span><span></span><span></span><span></span>'+
-            '</div>'+
-            '<button class="lbtn" onclick="playSingle('+line.id+',true)" title="Play">'+
+            '<div class="wv" id="wv-'+line.id+'"><span></span><span></span><span></span><span></span></div>'+
+            '<button class="lbtn" onclick="playSingle('+line.id+')" title="Play">'+
               '<svg viewBox="0 0 24 24" fill="'+fill+'"><path d="M8 5v14l11-7z"/></svg>'+
             '</button>'+
           '</div>'+
@@ -286,139 +206,164 @@ var LINE_DATA = LINES.map(function(l){ return {toks:tokenise(l.text)}; });
   });
 })();
 
-// ══════════════════════════════════════════════════════
-//  HIGHLIGHT HELPERS
-// ══════════════════════════════════════════════════════
-function getSpans(id){ var p=document.getElementById('txt-'+id); return p?Array.from(p.querySelectorAll('.w')):[];}
-function clearLine(id){ getSpans(id).forEach(function(s){s.className='w';}); }
-function markDone(id){ getSpans(id).forEach(function(s){s.className='w done';}); }
+// ══════════════════════════════════════════════════
+// HIGHLIGHT HELPERS
+// ══════════════════════════════════════════════════
+function spans(id){
+  var p=document.getElementById('txt-'+id);
+  return p?Array.from(p.querySelectorAll('.w')):[];
+}
+function clearLine(id){ spans(id).forEach(function(s){s.className='w';}); }
+function markAllDone(id){ spans(id).forEach(function(s){s.className='w done';}); }
 
-function hlWord(id, wi){
-  getSpans(id).forEach(function(s,i){
-    if(i<wi)       { s.className='w done'; }
-    else if(i===wi){ s.className='w hl'; bumpAnim(s); }
-    else           { s.className='w'; }
+function hlWord(id,wi){
+  spans(id).forEach(function(s,i){
+    if(i<wi)        s.className='w done';
+    else if(i===wi){ s.className='w hl'; bump(s); }
+    else            s.className='w';
   });
 }
-function bumpAnim(el){
+function bump(el){
   el.style.animationName='none';
   requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.style.animationName=''; }); });
 }
-
-function setActive(id, on){
+function setActive(id,on){
   var row=document.getElementById('row-'+id);
   var wv =document.getElementById('wv-'+id);
   if(row){ if(on) row.classList.add('speaking'); else row.classList.remove('speaking'); }
-  if(wv) { if(on) wv.classList.add('on');        else wv.classList.remove('on'); }
+  if(wv){  if(on) wv.classList.add('on');        else wv.classList.remove('on'); }
 }
 function resetAll(){
   LINES.forEach(function(l){ clearLine(l.id); setActive(l.id,false); });
 }
-
-// charIndex → token index within line
-function charToTok(id, ci){
-  var toks=LINE_DATA[id].toks, b=0;
+function charToTok(id,ci){
+  var toks=LD[id].toks, b=0;
   for(var i=0;i<toks.length;i++){ if(toks[i].cs<=ci) b=i; else break; }
   return b;
 }
 
-// ══════════════════════════════════════════════════════
-//  VOICE SELECTION
-//  Strategy: differentiate Linda vs Glynda maximally.
-//  Linda  → first female voice found (bright/higher pitch)
-//  Glynda → look for a different voice, prefer male or
-//            second female (slower/lower pitch)
-// ══════════════════════════════════════════════════════
-var TTS = ('speechSynthesis' in window) ? window.speechSynthesis : null;
-var voices=[];
+// ══════════════════════════════════════════════════
+// VOICE SELECTION — Prioritises natural/neural voices
+// Strategy:
+//   1. Score all English voices (neural/premium = highest)
+//   2. Linda  → best-scored feminine voice
+//   3. Glynda → best-scored voice that is DIFFERENT from Linda
+//      (prefer a clearly different timbre — male or distinct female)
+//   4. Show chosen voice names in UI so user can verify
+// ══════════════════════════════════════════════════
+var TTS=('speechSynthesis' in window)?window.speechSynthesis:null;
+var voices=[], _vc={L:null,G:null};
 var stsEl=document.getElementById('sts');
+var voiceInfoEl=document.getElementById('voiceInfo');
 
 function safeVoices(){ try{ return (TTS&&TTS.getVoices())||[]; }catch(e){ return []; } }
 
 function loadVoices(){
   var v=safeVoices(); if(!v.length) return;
-  voices=v;
+  voices=v; _vc={L:null,G:null};
   stsEl.textContent='✓ '+v.length+' voices ready';
-  setTimeout(function(){ stsEl.textContent=''; },2500);
+  setTimeout(function(){ stsEl.textContent=''; },3000);
 }
 
 if(!TTS){ stsEl.textContent='⚠️ Speech not supported on this browser.'; }
 else{
   loadVoices();
-  try{ if('onvoiceschanged' in TTS) TTS.onvoiceschanged=loadVoices; }catch(e){}
-  var _p=setInterval(function(){ if(voices.length)clearInterval(_p); else loadVoices(); },250);
-  setTimeout(function(){ clearInterval(_p); },8000);
+  try{ if('onvoiceschanged' in TTS) TTS.onvoiceschanged=function(){ voices=[]; _vc={L:null,G:null}; loadVoices(); }; }catch(e){}
+  var _poll=setInterval(function(){ if(voices.length)clearInterval(_poll); else loadVoices(); },250);
+  setTimeout(function(){ clearInterval(_poll); },8000);
 }
 
-// Pick the most natural-sounding English voices and keep them stable
-var _voiceCache={L:null,G:null};
+function scoreVoice(v){
+  var n=(v.name+' '+v.lang).toLowerCase(), s=0;
+
+  // Neural / premium / on-device voices (most natural)
+  if(/natural|neural|premium|enhanced|wavenet/.test(n)) s+=30;
+  if(/journey|studio/.test(n)) s+=25; // Google Journey/Studio = very natural
+
+  // Named high-quality voices by platform
+  // Google
+  if(/google/.test(n)) s+=12;
+  // Apple on-device (very natural, low latency)
+  if((v.localService && /apple|mac|ios/.test(n)) || (v.localService && /^en/.test(v.lang))) s+=10;
+  // Microsoft Neural
+  if(/microsoft/.test(n) && /aria|jenny|sonia|libby|maisie|ryan|guy|eric/.test(n)) s+=18;
+  if(/microsoft/.test(n)) s+=5;
+
+  // Prefer US or GB English
+  if(/en-us/i.test(v.lang)) s+=4;
+  if(/en-gb/i.test(v.lang)) s+=3;
+  if(/^en/i.test(v.lang)) s+=1;
+
+  return s;
+}
+
+// Feminine leaning names
+var femRe=/female|woman|samantha|victoria|fiona|karen|moira|tessa|allison|ava|kate|emma|amy|joanna|kendra|kimberly|salli|ivy|aria|jenny|michelle|sonia|libby|maisie|zira|nova|shimmer|nicky|linda|susan|alice|emily|grace|claire|serena/i;
+// Masculine leaning names
+var malRe=/male|man|david|mark|james|ryan|arthur|christopher|eric|liam|matthew|thomas|brian|guy|onyx|echo|daniel|rishi|aaron|alex\b/i;
 
 function pickVoices(){
-  if(_voiceCache.L&&_voiceCache.G) return;
+  if(_vc.L&&_vc.G) return;
   if(!voices.length) voices=safeVoices();
+  var en=voices.filter(function(v){ return /^en/i.test(v.lang); });
+  if(!en.length) en=voices; if(!en.length) return;
 
-  // All english voices
-  var en=voices.filter(function(v){ return /en[-_]/i.test(v.lang)||v.lang==='en'; });
-  if(!en.length) en=voices;
-  if(!en.length) return;
+  var ranked=[].concat(en).sort(function(a,b){ return scoreVoice(b)-scoreVoice(a); });
 
-  // Prefer "natural" / "neural" / "premium" voices when available
-  var pref=/natural|neural|premium|enhanced|wavenet|studio|journey/i;
-  var femRe=/female|woman|zira|samantha|victoria|fiona|karen|moira|tessa|allison|ava|kate|emma|amy|joanna|kendra|kimberly|salli|ivy|aria|jenny|michelle|sonia|libby|maisie|eloquence|google\s+us\s+english|google\s+uk\s+english/i;
-  var malRe=/male|man|guy|david|mark|james|ryan|guy|arthur|christopher|eric|liam|matthew|stephan|thomas|brian/i;
+  var fem=ranked.filter(function(v){ return femRe.test(v.name); });
+  var mal=ranked.filter(function(v){ return malRe.test(v.name); });
 
-  var premium=en.filter(function(v){ return pref.test(v.name); });
-  var fem    =en.filter(function(v){ return femRe.test(v.name); });
-  var male   =en.filter(function(v){ return malRe.test(v.name); });
+  // Linda: best-scored feminine voice
+  _vc.L = fem[0] || ranked[0];
 
-  // Linda: first premium female, else first female, else first voice
-  _voiceCache.L = (premium.filter(function(v){return femRe.test(v.name);})[0])
-               || fem[0]
-               || en[0];
+  // Glynda: prefer male for contrast; else best feminine ≠ Linda; else any ≠ Linda
+  var notLinda=ranked.filter(function(v){ return v!==_vc.L; });
+  _vc.G = (mal[0] && mal[0]!==_vc.L ? mal[0] : null)
+       || notLinda.filter(function(v){ return femRe.test(v.name); })[0]
+       || notLinda[0]
+       || ranked[0];
 
-  // Glynda: try to pick a DIFFERENT voice — prefer male or second female
-  var notLinda=en.filter(function(v){ return v!==_voiceCache.L; });
-  _voiceCache.G = male[0]
-              || (premium.filter(function(v){return malRe.test(v.name);})[0])
-              || notLinda.filter(function(v){ return femRe.test(v.name); })[0]
-              || notLinda[0]
-              || en[1]
-              || en[0];
+  // Show voice info
+  var li=_vc.L?_vc.L.name:'?', gi=_vc.G?_vc.G.name:'?';
+  voiceInfoEl.textContent='Linda: '+li+' · Glynda: '+gi;
 }
 
-function getVoice(s){ pickVoices(); return s==='L'?_voiceCache.L:_voiceCache.G; }
+function getVoice(s){ pickVoices(); return s==='L'?_vc.L:_vc.G; }
 
-// ══════════════════════════════════════════════════════
-//  ENGINE
+// ══════════════════════════════════════════════════
+// ENGINE — Fixed last-words sync
 //
-//  Each LINE is spoken as ONE utterance (full sentence).
-//  → Natural prosody, intonation, rhythm preserved.
+// Root cause of last words not lighting up:
+//   The rAF loop used `estDur` as both the denominator
+//   (frac = elapsed/estDur) AND the stop condition,
+//   so when elapsed ≥ estDur the fraction maxed at 1.0
+//   AND the loop exited — sometimes before onboundary
+//   fired for the last 2-3 words.
 //
-//  SYNC STRATEGY (two-tier):
+// Fix applied:
+//   • Tier 1 (onboundary): on EVERY boundary event,
+//     highlight the word. After firing, schedule a
+//     delayed "finish" (400ms) that highlights any
+//     remaining words sequentially before callDone.
+//     Never stop on the last boundary event alone.
 //
-//  Tier 1 · onboundary (Chrome desktop, Edge, Firefox)
-//    Exact character offset → word index → highlight.
-//    Self-disables timer if it fires.
+//   • Tier 2 (rAF): keep running until
+//     lastWi === toks.length-1 AND elapsed > deadline.
+//     deadline = estDur * 1.35 + 800ms — generous
+//     so last words are always reached.
+//     After last word is lit, wait 350ms then callDone.
 //
-//  Tier 2 · Adaptive rAF-driven timer (mobile/Safari)
-//    onstart records t0 = performance.now().
-//    Each animation frame checks elapsed time and
-//    steps through words using proportional character
-//    offsets as a fraction of total utterance length.
-//    Calibrates ms-per-char from actual onend duration.
+//   • Tier 3 (onend safety): waits 1000ms then forces
+//     callDone. Never calls it before Tier 1/2 can run.
 //
-//  Both tiers run simultaneously; Tier 1 wins when
-//  available, Tier 2 is the reliable mobile fallback.
-//
-//  Voice differentiation:
-//    Linda  pitch=1.12  rate×1.00  (bright, expressive)
-//    Glynda pitch=0.82  rate×0.93  (calm, lower, slower)
-// ══════════════════════════════════════════════════════
-
+// Voice naturalness:
+//   • rate capped at 0.88 (not 1.0) — slower = clearer
+//   • Linda pitch 1.05, Glynda pitch 0.90
+//   • Small rate difference between speakers (±0.04)
+// ══════════════════════════════════════════════════
 var isRunning=false, stopFlag=false, kaTimer=null, rafId=null;
-
-// Calibrated ms-per-char (updated after each line via onend)
-var msPerChar={L:68, G:72};
+// ms per non-space character, calibrated per speaker
+var msPerChar={L:82, G:86};
 
 function startKA(){
   stopKA();
@@ -428,68 +373,95 @@ function stopKA(){ if(kaTimer){clearInterval(kaTimer);kaTimer=null;} }
 function stopRaf(){ if(rafId){cancelAnimationFrame(rafId);rafId=null;} }
 function getRate(){ return parseFloat(document.getElementById('spRange').value)||0.78; }
 
-// ── Speak one full sentence ───────────────────
-function speakSentence(lineId, onEnd){
+function speakLine(lineId, onEnd){
   if(!TTS){ if(onEnd)onEnd(); return; }
 
-  var line = LINES[lineId];
-  var toks = LINE_DATA[lineId].toks;
-  var raw  = line.text;
-  var s    = line.s;
-  var rate = getRate();
+  var line=LINES[lineId], toks=LD[lineId].toks, raw=line.text, s=line.s;
+  var rate=getRate();
 
-  // Voice-specific adjustments
-  var pitch= s==='L' ? 1.12 : 0.82;
-  var rAdj = s==='L' ? 1.00 : 0.93; // Glynda speaks a touch slower
-  var voice= getVoice(s);
+  // Natural voice parameters
+  // Linda  → brighter pitch, slightly livelier
+  // Glynda → lower pitch, measured pace
+  var pitch = s==='L' ? 1.05 : 0.90;
+  var rAdj  = s==='L' ? 1.02 : 0.96;
+  var finalRate = Math.min(rate * rAdj, 0.88); // cap 0.88 → clearer articulation
+  var voice = getVoice(s);
 
-  var utter=new SpeechSynthesisUtterance(raw);
+  var utter = new SpeechSynthesisUtterance(raw);
   if(voice) utter.voice=voice;
-  utter.lang ='en-US';
-  utter.rate  =rate*rAdj;
-  utter.pitch =pitch;
-  utter.volume=1;
+  utter.lang   = 'en-US';
+  utter.rate   = finalRate;
+  utter.pitch  = pitch;
+  utter.volume = 1;
 
-  var t0=0, totalMs=0, boundaryFired=false, doneCalled=false;
-  var rafActive=false;
+  var t0=0;
+  var doneCalled=false;
+  var boundaryFired=false;   // true when Tier 1 takes over
+  var lastBoundaryWi=-1;
+  var endFired=false;
 
-  function finish(elapsed){
-    if(doneCalled) return;
-    doneCalled=true;
+  function callDone(){
+    if(doneCalled) return; doneCalled=true;
     stopRaf();
-    // Calibrate ms/char from real duration
-    var totalChars=raw.replace(/\s/g,'').length;
-    if(elapsed>200&&totalChars>0){
-      var measured=(elapsed/totalChars)*(rate*rAdj);
-      msPerChar[s]=msPerChar[s]*0.55+measured*0.45;
+    if(t0>0 && raw.replace(/\s/g,'').length>4){
+      var elapsed=performance.now()-t0;
+      var chars=raw.replace(/\s/g,'').length;
+      var measured=(elapsed/chars)*(finalRate);
+      msPerChar[s]=Math.round(msPerChar[s]*0.6+measured*0.4);
     }
-    markDone(lineId);
     setActive(lineId,false);
+    markAllDone(lineId);
     if(onEnd) setTimeout(onEnd,0);
   }
 
-  // ── Tier 2: rAF proportional timer ──────────
-  // Uses fraction of total estimated duration to
-  // step word highlights frame-by-frame.
+  // ── Tier 2: rAF proportional ─────────────────────────────────
   function startRaf(){
-    if(rafActive) return;
-    rafActive=true;
-    var estMs=(raw.length * msPerChar[s]) / (rate*rAdj);
+    var estDur=(raw.length * msPerChar[s]) / finalRate;
+    // deadline: generous — ensures last word is ALWAYS reached
+    var deadline = estDur * 1.4 + 900;
     var lastWi=-1;
+    var totalLen=raw.length||1;
+    var lastWordReached=false;
+
     function frame(){
-      if(stopFlag||boundaryFired){ stopRaf(); return; }
+      if(stopFlag){ stopRaf(); return; }
+      if(boundaryFired){ stopRaf(); return; } // Tier 1 active
+
       var elapsed=performance.now()-t0;
-      var frac=Math.min(elapsed/estMs, 1);
-      // Find which word should be highlighted at this fraction
-      // Use char offset as proxy: word charStart/totalLen ~ frac
-      var totalLen=raw.length;
+      // Use estDur for fraction but clamp at 0.98 so we never
+      // skip past the last word prematurely
+      var frac=Math.min(elapsed/estDur, 0.98);
+
       var wi=0;
       for(var i=0;i<toks.length;i++){
         if(toks[i].cs/totalLen<=frac) wi=i;
         else break;
       }
       if(wi!==lastWi){ hlWord(lineId,wi); lastWi=wi; }
-      if(frac<1) rafId=requestAnimationFrame(frame);
+
+      // Check if we reached the last word
+      if(lastWi>=toks.length-1 && !lastWordReached){
+        lastWordReached=true;
+        hlWord(lineId,toks.length-1); // force highlight last word
+        // Wait for animation then finish
+        setTimeout(function(){
+          stopRaf();
+          if(!doneCalled) callDone();
+        }, 360);
+        return;
+      }
+
+      // Keep looping until deadline
+      if(elapsed < deadline){
+        rafId=requestAnimationFrame(frame);
+      } else {
+        // Deadline passed — force last word then finish
+        hlWord(lineId,toks.length-1);
+        setTimeout(function(){
+          stopRaf();
+          if(!doneCalled) callDone();
+        }, 360);
+      }
     }
     rafId=requestAnimationFrame(frame);
   }
@@ -499,34 +471,74 @@ function speakSentence(lineId, onEnd){
     startRaf();
   };
 
-  // ── Tier 1: onboundary ───────────────────────
+  // ── Tier 1: onboundary ────────────────────────────────────────
+  // FIX: After each boundary event, schedule a "finish sweep"
+  // that highlights any remaining words if 400ms pass without
+  // another boundary event (handles the last 1-3 words gap).
+  var sweepTimer=null;
+  function scheduleSweep(){
+    if(sweepTimer) clearTimeout(sweepTimer);
+    sweepTimer=setTimeout(function(){
+      sweepTimer=null;
+      if(stopFlag||doneCalled) return;
+      // Highlight words from lastBoundaryWi+1 to end
+      var total=toks.length;
+      var pending=total-1-lastBoundaryWi;
+      if(pending<=0){ callDone(); return; }
+      // Step through remaining words with small delays
+      var wi=lastBoundaryWi+1;
+      function step(){
+        if(stopFlag||doneCalled) return;
+        hlWord(lineId,wi);
+        if(wi<total-1){ wi++; setTimeout(step,140); }
+        else{ setTimeout(callDone, 360); }
+      }
+      step();
+    }, 380); // wait 380ms after last boundary; if no new one arrives = sweep
+  }
+
   utter.onboundary=function(e){
     if(e.name!=='word') return;
-    if(!boundaryFired){
-      boundaryFired=true;
-      stopRaf(); // Tier 1 is more accurate; kill Tier 2
-    }
-    hlWord(lineId, charToTok(lineId, e.charIndex));
+    if(!boundaryFired){ boundaryFired=true; stopRaf(); }
+    var wi=charToTok(lineId,e.charIndex);
+    if(wi>lastBoundaryWi) lastBoundaryWi=wi;
+    hlWord(lineId,wi);
+    scheduleSweep(); // reset timer on every word
   };
 
+  // ── Tier 3: onend safety ─────────────────────────────────────
   utter.onend=function(){
-    stopRaf();
-    if(stopFlag){ if(!doneCalled){doneCalled=true;} return; }
-    finish(performance.now()-t0);
+    endFired=true;
+    if(stopFlag){ doneCalled=true; stopRaf(); if(sweepTimer){clearTimeout(sweepTimer);sweepTimer=null;} return; }
+
+    if(boundaryFired){
+      // If sweep timer is running, let it handle remaining words.
+      // If not (all words done), just wait a bit then finish.
+      if(!sweepTimer && !doneCalled){
+        // All words were already swept; finish
+        setTimeout(callDone, 200);
+      }
+      // Otherwise sweep timer will call callDone
+    }
+    // Tier 2 safety net: if rAF hasn't finished, give it 1.2s
+    setTimeout(function(){
+      if(!doneCalled) callDone();
+    }, 1200);
   };
 
   utter.onerror=function(e){
-    stopRaf();
     console.warn('TTS:',e.error,'|',raw);
-    if(!doneCalled){ doneCalled=true; if(onEnd) onEnd(); }
+    stopRaf();
+    if(sweepTimer){clearTimeout(sweepTimer);sweepTimer=null;}
+    if(!doneCalled) callDone();
   };
 
   try{ TTS.speak(utter); }catch(e){ if(onEnd) onEnd(); }
 }
 
-// ══════════════════════════════════════════════════════
-//  QUEUE RUNNER
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// QUEUE RUNNER
+// ══════════════════════════════════════════════════
 var queue=[];
 
 function runQueue(){
@@ -537,15 +549,14 @@ function runQueue(){
   }
   var id=queue.shift();
   var row=document.getElementById('row-'+id);
-  if(row){ setActive(id,true); row.scrollIntoView({behavior:'smooth',block:'center'}); }
+  setActive(id,true);
+  if(row) row.scrollIntoView({behavior:'smooth',block:'center'});
   hlWord(id,0);
 
-  speakSentence(id, function(){
+  speakLine(id,function(){
     if(stopFlag){ doStop(); return; }
-    // Natural inter-turn pause scaled by rate
-    var rate=getRate();
-    var gap=Math.round(680/rate * Math.min(rate,1));
-    setTimeout(runQueue, gap);
+    var gap=Math.round(720/Math.max(getRate(),0.5));
+    setTimeout(runQueue,gap);
   });
 }
 
@@ -557,49 +568,46 @@ function doStop(){
   document.getElementById('btnStop').classList.remove('on');
 }
 
-// ══════════════════════════════════════════════════════
-//  PUBLIC API
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// PUBLIC API
+// ══════════════════════════════════════════════════
 function stopAll(){ stopFlag=true; doStop(); }
 
-function playSingle(id, fromBtn){
+function playSingle(id){
   if(!TTS){ stsEl.textContent='⚠️ Speech not supported.'; return; }
-  stopFlag=true; try{TTS.cancel();}catch(e){}
+  stopFlag=true; try{if(TTS)TTS.cancel();}catch(e){}
   setTimeout(function(){
     resetAll(); stopFlag=false; isRunning=true; queue=[id];
-    if(fromBtn) document.getElementById('btnStop').classList.add('on');
+    document.getElementById('btnStop').classList.add('on');
     startKA(); runQueue();
-  },140);
+  },150);
 }
 
 function playAll(){
   if(!TTS){ stsEl.textContent='⚠️ Speech not supported.'; return; }
-  stopFlag=true; try{TTS.cancel();}catch(e){}
+  stopFlag=true; try{if(TTS)TTS.cancel();}catch(e){}
   setTimeout(function(){
     resetAll(); stopFlag=false; isRunning=true;
     queue=LINES.map(function(l){return l.id;});
     document.getElementById('btnStop').classList.add('on');
     startKA(); runQueue();
-  },140);
+  },150);
 }
 
-// ══════════════════════════════════════════════════════
-//  QR CODE
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// QR CODE
+// ══════════════════════════════════════════════════
 window.addEventListener('load',function(){
   var url=window.location.href.split('?')[0];
   try{
     new QRCode(document.getElementById('qr'),{
-      text:url, width:164, height:164,
-      colorDark:'#080c14', colorLight:'#ffffff',
+      text:url,width:164,height:164,
+      colorDark:'#080c14',colorLight:'#ffffff',
       correctLevel:QRCode.CorrectLevel.M
     });
   }catch(e){ document.getElementById('qr').textContent=url; }
 });
 
-// ══════════════════════════════════════════════════════
-//  CLEANUP
-// ══════════════════════════════════════════════════════
 window.addEventListener('beforeunload',function(){
   stopKA(); stopRaf();
   try{ if(TTS) TTS.cancel(); }catch(e){}
