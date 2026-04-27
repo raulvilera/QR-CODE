@@ -20,6 +20,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background:radial-gradient(ellipse 55% 45% at 10% 15%,rgba(232,97,74,.07) 0%,transparent 65%),
              radial-gradient(ellipse 50% 55% at 90% 80%,rgba(46,196,182,.06) 0%,transparent 65%)}
 
+/* HEADER */
 header{position:relative;z-index:1;text-align:center;padding:44px 20px 6px}
 header h1{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:600;font-size:clamp(2rem,6vw,2.8rem);letter-spacing:-.5px;
   background:linear-gradient(120deg,var(--L) 20%,var(--L2) 48%,var(--G) 80%);
@@ -28,13 +29,14 @@ header p{color:var(--muted);font-size:.76rem;margin-top:5px;letter-spacing:.4px}
 header::after{content:'';display:block;width:44px;height:1.5px;border-radius:1px;
   background:linear-gradient(90deg,var(--L),var(--G));margin:16px auto 0}
 
+/* STATUS */
 #sts{position:relative;z-index:1;text-align:center;font-size:.7rem;min-height:22px;padding:4px 16px;color:var(--muted)}
-#vnames{position:relative;z-index:1;text-align:center;font-size:.63rem;color:var(--muted);padding:0 16px 2px;opacity:.65}
 
+/* CONTROLS */
 .ctrl{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:10px 16px 26px}
 .btn-play{background:linear-gradient(135deg,var(--L),var(--L2));color:#fff;border:none;border-radius:50px;padding:12px 30px;
   font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:8px;
-  box-shadow:0 4px 20px rgba(232,97,74,.36);transition:transform .15s,box-shadow .2s}
+  box-shadow:0 4px 20px rgba(232,97,74,.36);transition:transform .15s,box-shadow .2s,opacity .2s}
 .btn-play:hover{transform:translateY(-2px);box-shadow:0 6px 26px rgba(232,97,74,.52)}
 .btn-play:active{transform:scale(.97)}
 .btn-play svg{width:14px;height:14px;fill:#fff}
@@ -49,12 +51,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   background:linear-gradient(135deg,var(--L),var(--G));cursor:pointer}
 #spv{font-size:.68rem;color:var(--text);min-width:28px;text-align:right}
 
+/* LEGEND */
 .legend{position:relative;z-index:1;display:flex;justify-content:center;gap:22px;flex-wrap:wrap;padding:0 16px 22px}
 .leg{display:flex;align-items:center;gap:7px;font-size:.7rem;color:var(--muted)}
 .sw{width:20px;height:7px;border-radius:3px}
 .sw.L{background:linear-gradient(90deg,var(--L),var(--L2))}
 .sw.G{background:linear-gradient(90deg,var(--G),var(--G2))}
 
+/* DIALOGUE */
 .dlg{position:relative;z-index:1;display:flex;flex-direction:column;gap:13px;max-width:680px;margin:0 auto;padding:0 14px}
 .row{display:flex;align-items:flex-start;gap:9px}
 .row.G{flex-direction:row-reverse}
@@ -74,6 +78,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 .row.G .sn{color:var(--G)}
 .hr{display:flex;align-items:center;gap:6px}
 
+/* Wave bars */
 @keyframes wb{0%,100%{transform:scaleY(1)}50%{transform:scaleY(2.8)}}
 .wv{display:none;gap:2px;align-items:center;height:12px}
 .wv.on{display:flex}
@@ -84,23 +89,26 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 .wv span:nth-child(3){animation-delay:.16s}
 .wv span:nth-child(4){animation-delay:.24s}
 
+/* Line play btn */
 .lbtn{width:25px;height:25px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;transition:transform .15s}
-.lbtn:hover{transform:scale(1.13)}
+  flex-shrink:0;transition:transform .15s,opacity .2s}
+.lbtn:hover{transform:scale(1.13);opacity:.85}
 .lbtn svg{width:9px;height:9px}
 .row.L .lbtn{background:rgba(232,97,74,.2)}
 .row.G .lbtn{background:rgba(46,196,182,.18)}
 
+/* Words */
 .txt{font-size:.94rem;line-height:1.82;font-weight:300;color:var(--text)}
 .w{display:inline;border-radius:5px;padding:1px 2px;transition:color .06s}
-@keyframes wp{0%{transform:scale(1)}38%{transform:scale(1.18)}100%{transform:scale(1)}}
-.w.hl{display:inline-block;animation:wp .18s cubic-bezier(.34,1.56,.64,1)}
+@keyframes wp{0%{transform:scale(1)}38%{transform:scale(1.16)}100%{transform:scale(1)}}
+.w.hl{display:inline-block;animation:wp .21s cubic-bezier(.34,1.56,.64,1)}
 .row.L .w.hl{background:linear-gradient(135deg,rgba(232,97,74,.28),rgba(245,160,90,.22));color:#ffd0a5!important;font-weight:500;
   text-shadow:0 0 14px rgba(232,97,74,.55);outline:1px solid rgba(232,97,74,.32);border-radius:6px}
 .row.G .w.hl{background:linear-gradient(135deg,rgba(46,196,182,.25),rgba(72,169,230,.2));color:#a6f5ef!important;font-weight:500;
   text-shadow:0 0 14px rgba(46,196,182,.65);outline:1px solid rgba(46,196,182,.35);border-radius:6px}
-.w.done{opacity:.38}
+.w.done{opacity:.42}
 
+/* QR */
 .qr-wrap{position:relative;z-index:1;max-width:680px;margin:56px auto 0;padding:0 16px;text-align:center}
 .qr-wrap h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;margin-bottom:4px}
 .qr-wrap p{color:var(--muted);font-size:.74rem;margin-bottom:16px}
@@ -114,11 +122,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <p>English Dialogue · Words glow in sync with speech</p>
 </header>
 <div id="sts">⏳ Loading voices…</div>
-<div id="vnames"></div>
 
 <div class="legend">
-  <div class="leg"><div class="sw L"></div><span>Linda — warm &amp; expressive</span></div>
   <div class="leg"><div class="sw G"></div><span>Glynda — calm &amp; measured</span></div>
+  <div class="leg"><div class="sw L"></div><span>Linda — warm &amp; expressive</span></div>
 </div>
 
 <div class="ctrl">
@@ -129,9 +136,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
   <button class="btn-stop" id="btnStop" onclick="stopAll()">■ Stop</button>
   <div class="pill">
     <label for="spRange">Speed</label>
-    <input type="range" id="spRange" min="0.6" max="1.0" step="0.05" value="0.82"
+    <input type="range" id="spRange" min="0.55" max="1.1" step="0.05" value="0.78"
            oninput="document.getElementById('spv').textContent=parseFloat(this.value).toFixed(2)+'×'">
-    <span id="spv">0.82×</span>
+    <span id="spv">0.78×</span>
   </div>
 </div>
 
@@ -144,35 +151,39 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
 </div>
 
 <script>
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // DATA
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 var LINES = [
-  {id:0,s:'L',name:'Linda',  text:'Hi Glynda! How are you doing today?'},
-  {id:1,s:'G',name:'Glynda', text:"Hi Linda. I'm okay, just a little tired."},
-  {id:2,s:'L',name:'Linda',  text:"I understand. I love my job, but my days are very busy."},
-  {id:3,s:'G',name:'Glynda', text:"I have a good job and I make a lot of money, but I'm not happy."},
-  {id:4,s:'L',name:'Linda',  text:'Really? Why not?'},
-  {id:5,s:'G',name:'Glynda', text:"I work so much. I don't have enough time for my son."},
-  {id:6,s:'L',name:'Linda',  text:'I see. I have three children, and I really try to spend a lot of time with them.'},
-  {id:7,s:'G',name:'Glynda', text:'That is wonderful. I have one son, and I want to spend so much more time with him.'},
-  {id:8,s:'L',name:'Linda',  text:'Maybe you can start with small changes. It really helps.'},
-  {id:9,s:'G',name:'Glynda', text:"Yes, I think you're right. I really need that."}
+  {id:0,  s:'G', name:'Glynda', text:'Hello, Linda. You are quiet today. Are you okay?'},
+  {id:1,  s:'L', name:'Linda',  text:'No, I am not okay. I am sad.'},
+  {id:2,  s:'G', name:'Glynda', text:'Why are you sad? Is everything ok?'},
+  {id:3,  s:'L', name:'Linda',  text:"Today is a holiday and my family is here but my father can't come."},
+  {id:4,  s:'G', name:'Glynda', text:'Really? Where is he?'},
+  {id:5,  s:'L', name:'Linda',  text:'He is in Salvador.'},
+  {id:6,  s:'G', name:'Glynda', text:'Why is he there?'},
+  {id:7,  s:'L', name:'Linda',  text:'Because he is a businessman.'},
+  {id:8,  s:'G', name:'Glynda', text:'What about your mother? Is she a businesswoman?'},
+  {id:9,  s:'L', name:'Linda',  text:'No, she is a teacher.'},
+  {id:10, s:'G', name:'Glynda', text:'Is she a good teacher?'},
+  {id:11, s:'L', name:'Linda',  text:'Yes, she is a very good teacher.'},
+  {id:12, s:'G', name:'Glynda', text:'I have to go now. See you later. Bye, Linda.'},
+  {id:13, s:'L', name:'Linda',  text:'Bye, Glynda.'}
 ];
 
-// ═══════════════════════════════════════════════════════════
-// TOKENISE — split text into word tokens with char offsets
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// TOKENISE
+// ══════════════════════════════════════════════════
 function tokenise(txt){
   var out=[],re=/\S+/g,m;
-  while((m=re.exec(txt))!==null) out.push({t:m[0],cs:m.index,ce:m.index+m[0].length});
+  while((m=re.exec(txt))!==null) out.push({t:m[0],cs:m.index});
   return out;
 }
 var LD = LINES.map(function(l){ return {toks:tokenise(l.text)}; });
 
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // BUILD DOM
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 (function(){
   var c=document.getElementById('dlg');
   LINES.forEach(function(line){
@@ -180,7 +191,7 @@ var LD = LINES.map(function(l){ return {toks:tokenise(l.text)}; });
     toks.forEach(function(tok,wi){
       if(tok.cs>last) html+=raw.slice(last,tok.cs);
       html+='<span class="w" id="w-'+line.id+'-'+wi+'">'+tok.t+'</span>';
-      last=tok.ce;
+      last=tok.cs+tok.t.length;
     });
     if(last<raw.length) html+=raw.slice(last);
     var fill=line.s==='L'?'#e8614a':'#2ec4b6';
@@ -193,7 +204,7 @@ var LD = LINES.map(function(l){ return {toks:tokenise(l.text)}; });
           '<span class="sn">'+line.name+'</span>'+
           '<div class="hr">'+
             '<div class="wv" id="wv-'+line.id+'"><span></span><span></span><span></span><span></span></div>'+
-            '<button class="lbtn" onclick="playSingle('+line.id+')" title="Replay">'+
+            '<button class="lbtn" onclick="playSingle('+line.id+')" title="Play">'+
               '<svg viewBox="0 0 24 24" fill="'+fill+'"><path d="M8 5v14l11-7z"/></svg>'+
             '</button>'+
           '</div>'+
@@ -204,358 +215,237 @@ var LD = LINES.map(function(l){ return {toks:tokenise(l.text)}; });
   });
 })();
 
-// ═══════════════════════════════════════════════════════════
-// HIGHLIGHT HELPERS
-// ═══════════════════════════════════════════════════════════
-function getSpans(id){
+// ══════════════════════════════════════════════════
+// HIGHLIGHT
+// ══════════════════════════════════════════════════
+function spans(id){
   var p=document.getElementById('txt-'+id);
-  return p?p.querySelectorAll('.w'):[];
+  return p?Array.from(p.querySelectorAll('.w')):[];
 }
-function clearLine(id){
-  var sp=getSpans(id);
-  for(var i=0;i<sp.length;i++) sp[i].className='w';
-}
-function markDone(id){
-  var sp=getSpans(id);
-  for(var i=0;i<sp.length;i++) sp[i].className='w done';
-}
+function clearLine(id){ spans(id).forEach(function(s){s.className='w';}); }
+
+function markAllDone(id){ spans(id).forEach(function(s){s.className='w done';}); }
+
 function hlWord(id,wi){
-  var sp=getSpans(id);
-  for(var i=0;i<sp.length;i++){
-    if(i<wi) sp[i].className='w done';
-    else if(i===wi){ sp[i].className='w hl'; bumpAnim(sp[i]); }
-    else sp[i].className='w';
-  }
+  spans(id).forEach(function(s,i){
+    if(i<wi)        s.className='w done';
+    else if(i===wi){ s.className='w hl'; bump(s); }
+    else            s.className='w';
+  });
 }
-function bumpAnim(el){
+function hlLast(id){
+  var sp=spans(id);
+  if(!sp.length) return;
+  var last=sp.length-1;
+  sp.forEach(function(s,i){
+    if(i<last) s.className='w done';
+    else{ s.className='w hl'; bump(s); }
+  });
+}
+function bump(el){
   el.style.animationName='none';
-  requestAnimationFrame(function(){requestAnimationFrame(function(){el.style.animationName='';});});
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ el.style.animationName=''; }); });
 }
 function setActive(id,on){
   var row=document.getElementById('row-'+id);
-  var wv=document.getElementById('wv-'+id);
-  if(row){ if(on)row.classList.add('speaking'); else row.classList.remove('speaking'); }
-  if(wv){ if(on)wv.classList.add('on'); else wv.classList.remove('on'); }
+  var wv =document.getElementById('wv-'+id);
+  if(row){ if(on) row.classList.add('speaking'); else row.classList.remove('speaking'); }
+  if(wv){  if(on) wv.classList.add('on');        else wv.classList.remove('on'); }
 }
 function resetAll(){
   LINES.forEach(function(l){ clearLine(l.id); setActive(l.id,false); });
 }
+function charToTok(id,ci){
+  var toks=LD[id].toks, b=0;
+  for(var i=0;i<toks.length;i++){ if(toks[i].cs<=ci) b=i; else break; }
+  return b;
+}
 
-// ═══════════════════════════════════════════════════════════
-// VOICE SELECTION — Best natural voices available
-//
-// Scoring system prioritises (highest to lowest):
-//   Neural/Premium/Enhanced/WaveNet/Journey/Studio voices
-//   Google voices (generally most natural on desktop)
-//   Apple local voices (natural on iOS/macOS)
-//   Microsoft Neural named voices
-//   US/UK English preference
-//
-// Linda  → best feminine voice
-// Glynda → best contrasting voice (male preferred for distinction)
-//
-// Rate is kept ≤ 0.85 — slower = clearer, less robotic
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// VOICES
+// ══════════════════════════════════════════════════
 var TTS=('speechSynthesis' in window)?window.speechSynthesis:null;
-var allVoices=[], chosen={L:null,G:null};
+var voices=[], _vc={L:null,G:null};
 var stsEl=document.getElementById('sts');
-var vnEl=document.getElementById('vnames');
 
-function safeGetVoices(){ try{return TTS?TTS.getVoices():[];}catch(e){return[];} }
+function safeVoices(){ try{ return (TTS&&TTS.getVoices())||[]; }catch(e){ return []; } }
 
 function loadVoices(){
-  var v=safeGetVoices(); if(!v.length) return;
-  allVoices=v; chosen={L:null,G:null};
-  stsEl.textContent='✓ '+v.length+' voices loaded';
-  setTimeout(function(){if(stsEl.textContent.indexOf('✓')===0)stsEl.textContent='';},3000);
+  var v=safeVoices(); if(!v.length) return;
+  voices=v; _vc={L:null,G:null};
+  stsEl.textContent='✓ '+v.length+' voices ready';
+  setTimeout(function(){ stsEl.textContent=''; },2500);
 }
 
-if(!TTS){ stsEl.textContent='⚠️ Speech synthesis not supported in this browser.'; }
+if(!TTS){ stsEl.textContent='⚠️ Speech not supported on this browser.'; }
 else{
   loadVoices();
-  try{
-    if('onvoiceschanged' in TTS) TTS.onvoiceschanged=function(){allVoices=[];chosen={L:null,G:null};loadVoices();};
-  }catch(e){}
-  var _poll=setInterval(function(){if(allVoices.length){clearInterval(_poll);}else{loadVoices();}},300);
-  setTimeout(function(){clearInterval(_poll);},9000);
+  try{ if('onvoiceschanged' in TTS) TTS.onvoiceschanged=loadVoices; }catch(e){}
+  var _poll=setInterval(function(){ if(voices.length)clearInterval(_poll); else loadVoices(); },250);
+  setTimeout(function(){ clearInterval(_poll); },8000);
 }
-
-function scoreVoice(v){
-  var n=(v.name+' '+v.lang).toLowerCase(), s=0;
-  if(/^en/i.test(v.lang)) s+=5;
-  if(/en-us/i.test(v.lang)) s+=4;
-  if(/en-gb/i.test(v.lang)) s+=3;
-  // Neural / premium — most natural sounding
-  if(/neural|natural|premium|enhanced|wavenet|journey|studio/.test(n)) s+=35;
-  // Well-known high-quality named voices
-  if(/google/.test(n)) s+=15;
-  // Apple on-device voices — very natural
-  if(v.localService && /^en/i.test(v.lang)) s+=12;
-  // Microsoft high-quality neural voices
-  if(/microsoft/.test(n)){
-    if(/aria|jenny|sonia|libby|maisie|ryan|guy|eric|ana|christopher|jacob|jason|jenny/.test(n)) s+=20;
-    else s+=5;
-  }
-  return s;
-}
-
-var _femRe=/female|woman|samantha|victoria|fiona|karen|moira|tessa|allison|ava|kate|emma|amy|joanna|kendra|kimberly|salli|ivy|aria|jenny|michelle|sonia|libby|maisie|zira|nova|shimmer|nicky|alice|emily|grace|claire|serena|lisa|laura/i;
-var _malRe=/male(?!\s*fem)|^male$|\bman\b|david|mark|james|ryan|arthur|christopher|eric|liam|matthew|thomas|brian|guy|onyx|echo|daniel|rishi|aaron|fred|ralph|albert|bruce|junior|lee/i;
 
 function pickVoices(){
-  if(chosen.L&&chosen.G) return;
-  if(!allVoices.length) allVoices=safeGetVoices();
-  var en=allVoices.filter(function(v){return /^en/i.test(v.lang);});
-  if(!en.length) en=allVoices;
-  if(!en.length) return;
+  if(_vc.L&&_vc.G) return;
+  if(!voices.length) voices=safeVoices();
+  var en=voices.filter(function(v){ return /^en/i.test(v.lang); });
+  if(!en.length) en=voices; if(!en.length) return;
 
-  var ranked=en.slice().sort(function(a,b){return scoreVoice(b)-scoreVoice(a);});
-  var fem=ranked.filter(function(v){return _femRe.test(v.name);});
-  var mal=ranked.filter(function(v){return _malRe.test(v.name);});
-
-  chosen.L = fem[0] || ranked[0];
-  var notL=ranked.filter(function(v){return v!==chosen.L;});
-  var goodMal=mal.filter(function(v){return v!==chosen.L;});
-  chosen.G = goodMal[0] || notL.filter(function(v){return _femRe.test(v.name);})[0] || notL[0] || chosen.L;
-
-  vnEl.textContent='Linda: "'+chosen.L.name+'"  ·  Glynda: "'+chosen.G.name+'"';
-}
-
-// ═══════════════════════════════════════════════════════════
-// WORD-SYNC ENGINE — Dual-mode with guaranteed last-word fix
-//
-// THE CORE PROBLEM with Web Speech API sync:
-//   onboundary fires correctly for words 1..N-2 but often
-//   NEVER fires for the last 1-3 words because the browser
-//   fires onend before (or instead of) those final boundaries.
-//
-// SOLUTION: Two independent sync paths, both active:
-//
-// PATH A — onboundary (Chrome/Edge desktop: very accurate)
-//   Each boundary event → highlight that word.
-//   Also builds a REAL timing table: records (wordIndex, realTime)
-//   for every word that fires, then uses linear interpolation
-//   to estimate timing for any words that DON'T fire.
-//   After onend: finish any remaining words using the
-//   interpolated schedule with setTimeout chains.
-//
-// PATH B — AudioContext clock (Safari/Firefox/mobile fallback)
-//   Uses AudioContext.currentTime as a monotonic clock.
-//   Pre-computes word timestamps using syllable-weighted
-//   distribution (not just char-linear) so short words like
-//   "I", "a", "my" aren't over-allocated time.
-//   Polls every animation frame; because AudioContext clock
-//   doesn't pause, this stays accurate even when onend fires
-//   before the last words.
-//
-// LAST-WORD GUARANTEE:
-//   onend handler: regardless of path, schedules a
-//   "completion sweep" that steps through any un-highlighted
-//   words at measured-per-word pace, then calls done.
-// ═══════════════════════════════════════════════════════════
-var isRunning=false, stopFlag=false, kaTimer=null, rafId=null;
-
-// Syllable count approximation (for PATH B timing distribution)
-function syllables(word){
-  var w=word.toLowerCase().replace(/[^a-z]/g,'');
-  if(!w.length) return 1;
-  var count=(w.match(/[aeiouy]+/g)||[]).length;
-  if(w.match(/[aeiouy]e$/)) count=Math.max(1,count-1);
-  return Math.max(1,count);
-}
-
-// Build syllable-weighted timing array for a line
-// Returns array of {wi, t} where t is fraction [0..1] of total duration
-function buildTimings(toks){
-  var syls=toks.map(function(tok){ return syllables(tok.t); });
-  var total=syls.reduce(function(a,b){return a+b;},0)||1;
-  var out=[], acc=0;
-  for(var i=0;i<toks.length;i++){
-    out.push(acc/total);
-    acc+=syls[i];
+  function score(v){
+    var n=v.name.toLowerCase(), s=0;
+    if(/natural|neural|premium|enhanced|wavenet|journey|studio|aria|sonia|jenny|libby|maisie|nova|onyx|echo|shimmer/.test(n)) s+=20;
+    if(/google/.test(n)) s+=8;
+    if(/microsoft/.test(n)) s+=6;
+    if(/apple/.test(n)||v.localService) s+=5;
+    if(/female|woman/.test(n)) s+=2;
+    return s;
   }
-  return out; // fractions: when each word should start
+
+  var ranked=[].concat(en).sort(function(a,b){ return score(b)-score(a); });
+
+  var femRe=/female|woman|samantha|victoria|fiona|karen|moira|tessa|allison|ava|kate|emma|amy|joanna|kendra|kimberly|salli|ivy|aria|jenny|michelle|sonia|libby|maisie|zira|nova|shimmer/i;
+  var malRe=/male|man|david|mark|james|ryan|arthur|christopher|eric|liam|matthew|thomas|brian|guy|onyx|echo|daniel|rishi/i;
+
+  var fem =ranked.filter(function(v){ return femRe.test(v.name); });
+  var mal =ranked.filter(function(v){ return malRe.test(v.name); });
+
+  _vc.L = fem[0] || ranked[0];
+
+  var notLinda=ranked.filter(function(v){ return v!==_vc.L; });
+  _vc.G = mal[0]
+       || notLinda.filter(function(v){ return femRe.test(v.name); })[0]
+       || notLinda[0]
+       || ranked[1]
+       || ranked[0];
 }
+
+function getVoice(s){ pickVoices(); return s==='L'?_vc.L:_vc.G; }
+
+// ══════════════════════════════════════════════════
+// ENGINE
+// ══════════════════════════════════════════════════
+var isRunning=false, stopFlag=false, kaTimer=null, rafId=null;
+var msPerChar={L:72, G:76};
 
 function startKA(){
   stopKA();
-  kaTimer=setInterval(function(){if(TTS&&TTS.paused){try{TTS.resume();}catch(e){}}},3500);
+  kaTimer=setInterval(function(){ if(TTS&&TTS.paused){ try{TTS.resume();}catch(e){} } },3500);
 }
 function stopKA(){ if(kaTimer){clearInterval(kaTimer);kaTimer=null;} }
 function stopRaf(){ if(rafId){cancelAnimationFrame(rafId);rafId=null;} }
-function getRate(){ return parseFloat(document.getElementById('spRange').value)||0.82; }
+function getRate(){ return parseFloat(document.getElementById('spRange').value)||0.78; }
 
 function speakLine(lineId, onEnd){
   if(!TTS){ if(onEnd)onEnd(); return; }
 
-  var line=LINES[lineId];
-  var toks=LD[lineId].toks;
-  var raw=line.text;
-  var s=line.s;
+  var line=LINES[lineId], toks=LD[lineId].toks, raw=line.text, s=line.s;
   var rate=getRate();
+  var pitch = s==='L' ? 1.10 : 0.85;
+  var rAdj  = s==='L' ? 1.00 : 0.94;
+  var voice = getVoice(s);
 
-  // Voice character — pitch and rate per speaker for natural distinction
-  var pitch = s==='L' ? 1.08 : 0.88;
-  var rAdj  = s==='L' ? 1.00 : 0.95;
-  var finalRate = Math.min(rate * rAdj, 0.85); // ≤ 0.85 → clearest articulation
-
-  pickVoices();
-  var voice = s==='L' ? chosen.L : chosen.G;
-
-  var utter = new SpeechSynthesisUtterance(raw);
+  var utter=new SpeechSynthesisUtterance(raw);
   if(voice) utter.voice=voice;
-  utter.lang='en-US';
-  utter.rate=finalRate;
-  utter.pitch=pitch;
-  utter.volume=1;
+  utter.lang   = 'en-US';
+  utter.rate   = Math.min(rate*rAdj, 1.0);
+  utter.pitch  = pitch;
+  utter.volume = 1;
 
-  // Timing state
-  var t0=0;                     // performance.now() at onstart
+  var t0=0;
+  var estDur=0;
+  var boundaryFired=false;
+  var lastBoundaryWi=-1;
+  var endFired=false;
   var doneCalled=false;
-  var usedBoundary=false;       // true = PATH A (onboundary) is driving
-  var lastHlWi=-1;              // last word index highlighted (either path)
 
-  // PATH B pre-computed fractions
-  var fracs=buildTimings(toks);
-
-  // Estimated duration (ms) — used by PATH B
-  // Average English word ~ 280ms at rate 1.0; scale by rate
-  var estDur = toks.reduce(function(acc,tok){
-    return acc + Math.max(120, syllables(tok.t)*230/finalRate);
-  },0);
-  // Add 15% buffer so PATH B doesn't rush the last words
-  estDur = estDur * 1.15;
-
-  // ── DONE handler ──────────────────────────────────────────
   function callDone(){
-    if(doneCalled) return; doneCalled=true;
+    if(doneCalled) return;
+    doneCalled=true;
     stopRaf();
-    setActive(lineId,false);
-    markDone(lineId);
-    if(onEnd) setTimeout(onEnd,30);
-  }
-
-  // ── Completion sweep: finish any remaining words ──────────
-  // Called after onend to guarantee last words are highlighted.
-  // Uses measured per-word pace from PATH A, or fixed pace from PATH B.
-  var sweepTimer=null;
-  function clearSweep(){ if(sweepTimer){clearTimeout(sweepTimer);sweepTimer=null;} }
-
-  function completeSweep(fromWi, pace){
-    clearSweep();
-    if(doneCalled||stopFlag) return;
-    var wi=Math.max(fromWi,0);
-    if(wi>toks.length-1){ callDone(); return; }
-
-    function step(){
-      if(doneCalled||stopFlag) return;
-      hlWord(lineId,wi); lastHlWi=wi;
-      if(wi<toks.length-1){
-        wi++;
-        sweepTimer=setTimeout(step, pace);
-      } else {
-        // last word — hold highlight briefly then done
-        sweepTimer=setTimeout(callDone, 320);
-      }
-    }
-    step();
-  }
-
-  // ── PATH A: onboundary ────────────────────────────────────
-  // Records real timestamps to measure actual per-word pace.
-  var boundaryLog=[]; // [{wi, ts}] — real times of each fired boundary
-
-  utter.onboundary=function(e){
-    if(e.name!=='word') return;
-    if(!usedBoundary){ usedBoundary=true; stopRaf(); } // disable PATH B
-
-    // charIndex → word index
-    var toksArr=toks;
-    var wi=0;
-    for(var i=0;i<toksArr.length;i++){
-      if(toksArr[i].cs<=e.charIndex) wi=i; else break;
-    }
-    var now=performance.now()-t0;
-    boundaryLog.push({wi:wi,ts:now});
-    if(wi>lastHlWi){ hlWord(lineId,wi); lastHlWi=wi; }
-  };
-
-  // ── PATH B: rAF syllable-weighted clock ───────────────────
-  function startPathB(){
-    var lastWi=-1;
-    function frame(){
-      if(stopFlag||usedBoundary||doneCalled){ stopRaf(); return; }
+    if(t0>0 && raw.replace(/\s/g,'').length>3){
       var elapsed=performance.now()-t0;
-      var frac=elapsed/estDur; // can exceed 1.0 — that's fine
+      var chars=raw.replace(/\s/g,'').length;
+      var measured=(elapsed/chars)*(rate*rAdj);
+      msPerChar[s]=Math.round(msPerChar[s]*0.55+measured*0.45);
+    }
+    setActive(lineId,false);
+    markAllDone(lineId);
+    if(onEnd) setTimeout(onEnd,0);
+  }
 
-      // Find the last word whose start-fraction ≤ current frac
+  function startRaf(){
+    var effectiveRate=rate*rAdj;
+    estDur = (raw.length * msPerChar[s]) / effectiveRate;
+    var deadline = estDur + 600;
+    var lastWi=-1;
+    var totalLen=raw.length||1;
+
+    function frame(){
+      if(stopFlag){ stopRaf(); return; }
+      if(boundaryFired){ stopRaf(); return; }
+
+      var elapsed=performance.now()-t0;
+      var frac=Math.min(elapsed/estDur, 1.0);
+
       var wi=0;
       for(var i=0;i<toks.length;i++){
-        if(fracs[i]<=frac) wi=i; else break;
+        if(toks[i].cs/totalLen<=frac) wi=i;
+        else break;
       }
-      if(wi!==lastWi){ hlWord(lineId,wi); lastHlWi=wi; lastWi=wi; }
+      if(wi!==lastWi){ hlWord(lineId,wi); lastWi=wi; }
 
-      // Keep looping — stop only when last word is lit AND
-      // we're past estDur + 400ms (safety margin)
-      if(lastWi<toks.length-1 || elapsed<estDur+400){
+      if(lastWi < toks.length-1 || elapsed < deadline){
         rafId=requestAnimationFrame(frame);
       } else {
-        stopRaf();
-        // Last word already highlighted; hold then done
-        setTimeout(callDone,320);
+        hlLast(lineId);
+        setTimeout(function(){
+          stopRaf();
+          if(!doneCalled) callDone();
+        }, 280);
       }
     }
     rafId=requestAnimationFrame(frame);
   }
 
-  // ── onstart ───────────────────────────────────────────────
   utter.onstart=function(){
     t0=performance.now();
-    startPathB(); // start PATH B immediately; PATH A will take over if available
+    startRaf();
   };
 
-  // ── onend: guarantee last words are shown ─────────────────
+  utter.onboundary=function(e){
+    if(e.name!=='word') return;
+    if(!boundaryFired){ boundaryFired=true; stopRaf(); }
+    var wi=charToTok(lineId,e.charIndex);
+    lastBoundaryWi=wi;
+    hlWord(lineId,wi);
+  };
+
   utter.onend=function(){
-    if(stopFlag){ doneCalled=true; stopRaf(); clearSweep(); return; }
+    endFired=true;
+    if(stopFlag){ doneCalled=true; stopRaf(); return; }
 
-    if(usedBoundary){
-      // PATH A was driving — compute measured pace from log
-      var pace=160; // default ms per word
-      if(boundaryLog.length>=2){
-        var span=boundaryLog[boundaryLog.length-1].ts - boundaryLog[0].ts;
-        var steps=boundaryLog.length-1;
-        if(steps>0) pace=Math.round(span/steps);
-      }
-      pace=Math.max(80, Math.min(pace,400));
-      // Finish any words after last boundary
-      completeSweep(lastHlWi+1, pace);
-    } else {
-      // PATH B was driving — rAF may still be running
-      // Give it time to finish; if not done in 800ms, force it
-      setTimeout(function(){
-        if(!doneCalled){
-          stopRaf();
-          completeSweep(lastHlWi+1, 140);
-        }
-      },800);
+    if(boundaryFired){
+      var lastIdx=toks.length-1;
+      if(lastBoundaryWi<lastIdx) hlWord(lineId,lastIdx);
+      setTimeout(callDone, 320);
     }
-
-    // Hard timeout — never hang
-    setTimeout(function(){if(!doneCalled)callDone();},2000);
+    setTimeout(function(){
+      if(!doneCalled) callDone();
+    }, 800);
   };
 
   utter.onerror=function(e){
-    console.warn('TTS error:',e.error,'line:',lineId);
-    stopRaf(); clearSweep();
+    console.warn('TTS:',e.error,'|',raw);
+    stopRaf();
     if(!doneCalled) callDone();
   };
 
-  try{ TTS.speak(utter); }catch(e){ if(onEnd)onEnd(); }
+  try{ TTS.speak(utter); }catch(e){ if(onEnd) onEnd(); }
 }
 
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // QUEUE RUNNER
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 var queue=[];
 
 function runQueue(){
@@ -565,14 +455,14 @@ function runQueue(){
     return;
   }
   var id=queue.shift();
-  setActive(id,true);
   var row=document.getElementById('row-'+id);
+  setActive(id,true);
   if(row) row.scrollIntoView({behavior:'smooth',block:'center'});
   hlWord(id,0);
 
   speakLine(id,function(){
     if(stopFlag){ doStop(); return; }
-    var gap=Math.round(680/Math.max(getRate(),0.5));
+    var gap=Math.round(700/Math.max(getRate(),0.5));
     setTimeout(runQueue,gap);
   });
 }
@@ -580,14 +470,14 @@ function runQueue(){
 function doStop(){
   isRunning=false; stopFlag=false; queue=[];
   stopKA(); stopRaf();
-  try{if(TTS)TTS.cancel();}catch(e){}
+  try{ if(TTS) TTS.cancel(); }catch(e){}
   resetAll();
   document.getElementById('btnStop').classList.remove('on');
 }
 
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // PUBLIC API
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 function stopAll(){ stopFlag=true; doStop(); }
 
 function playSingle(id){
@@ -597,7 +487,7 @@ function playSingle(id){
     resetAll(); stopFlag=false; isRunning=true; queue=[id];
     document.getElementById('btnStop').classList.add('on');
     startKA(); runQueue();
-  },150);
+  },140);
 }
 
 function playAll(){
@@ -608,12 +498,12 @@ function playAll(){
     queue=LINES.map(function(l){return l.id;});
     document.getElementById('btnStop').classList.add('on');
     startKA(); runQueue();
-  },150);
+  },140);
 }
 
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 // QR CODE
-// ═══════════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
 window.addEventListener('load',function(){
   var url=window.location.href.split('?')[0];
   try{
@@ -627,7 +517,7 @@ window.addEventListener('load',function(){
 
 window.addEventListener('beforeunload',function(){
   stopKA(); stopRaf();
-  try{if(TTS)TTS.cancel();}catch(e){}
+  try{ if(TTS) TTS.cancel(); }catch(e){}
 });
 </script>
 </body>
